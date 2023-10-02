@@ -26,6 +26,7 @@ const Login = () => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
    
         localStorage.setItem('token', response.data.token);
+        alert(response.data.token);
         window.location.href = '/dashboard';
       } catch (error) {
         setMessage('Login failed. Please check your credentials.');

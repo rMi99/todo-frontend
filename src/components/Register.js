@@ -16,19 +16,26 @@ const Register = () => {
         name,
         email,
         password,
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+          'Authorization' : 'application/json',
         },
       });
 
       // Check if registration was successful
       if (response.data.status === true && response.data.token) {
-        // Registration success
+        
+        const token = response.data.token; 
+        localStorage.setItem('token', token);
+
         setMessage('Registration successful. You can now login.');
         setOpenAlert(true);
         
 
-        localStorage.setItem('token', response.data.token);
+        // localStorage.setItem('token', response.data.token);
         window.location.href = '/login';
        
         setName('');
@@ -44,6 +51,9 @@ const Register = () => {
       setOpenAlert(true);
     }
   };
+  const handleLoginPage =() =>{
+    window.location.href = '/login';
+  }
 
   const handleCloseAlert = () => {
     setOpenAlert(false);
@@ -90,9 +100,20 @@ const Register = () => {
             color="primary"
             fullWidth
             onClick={handleRegister}
-            style={{ margin: '20px 0' }}
+            style={{ margin: '5px 0',
+            backgroundColor: '#79AC78'  }}
           >
             Register
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleLoginPage}
+            style={{ margin: '5px 0',
+             backgroundColor: '#79AC78'  }}
+          >
+            Back to Login
           </Button>
           <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}

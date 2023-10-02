@@ -1,4 +1,4 @@
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NavComponent from './NavComponent';
 import TaskTable from './TaskTable';
@@ -9,18 +9,18 @@ import TaskTable from './TaskTable';
 
 
 const Dashboard = () => {
-    const [userName, setUserName] = useState('');
-
+    // const [userName, setUserName] = useState('');
     // const handleLogout = () => {
     //     localStorage.removeItem('token');
     //     window.location.href = '/login';
     //     // alert('logOut');
     //     // return <redirect to="/login" />;
-      
     // };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
         axios
             .get('http://localhost:8000/api/user', {
                 headers: {
@@ -28,7 +28,7 @@ const Dashboard = () => {
                 },
             })
             .then((response) => {
-                setUserName(response.data.name);
+                // setUserName(response.data.name);
             })
             .catch((error) => {
                 console.log(error);
@@ -36,22 +36,22 @@ const Dashboard = () => {
     }, []);
 
     return (
-        
+
         <div>
             <NavComponent />
-            <h2>Welcome, {userName}!</h2>
-{/*          
+            {/* <h2>Welcome, {userName}!</h2> */}
+            {/*          
             <Button variant="contained" color="secondary" onClick={handleLogout}>
                 Logout
             </Button> */}
-            
-            <TaskTable />
-           
-            
 
-            
+            <TaskTable />
+
+
+
+
         </div>
-        
+
     );
 };
 
