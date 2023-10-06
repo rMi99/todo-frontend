@@ -20,16 +20,16 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Spinner from './Spinner'; 
+import Spinner from './Spinner';
 import Avatar from '@mui/material/Avatar';
 
 const TaskTable = () => {
-  const userId = (localStorage.getItem('user_id'));
+  const userId = localStorage.getItem('user_id');
   const [tasks, setTasks] = useState([]);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDeleteId, setTaskToDeleteId] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState({
     id: null,
@@ -43,9 +43,8 @@ const TaskTable = () => {
     user_id: userId,
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');  
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [searchId, setSearchId] = useState('');
-  // const [searchedTask, setSearchedTask] = useState('');
   const [filteredTasks, setFilteredTasks] = useState([]);
 
   useEffect(() => {
@@ -81,11 +80,11 @@ const TaskTable = () => {
 
     if (newTodo.task.trim() === '') {
       setIsLoading(false);
-      setSnackbarMessage('Task cannot be null.'); 
+      setSnackbarMessage('Task cannot be null.');
       setSnackbarOpen(true);
       return;
     }
-  
+
     axios
       .post('http://localhost:8000/api/create', newTodo)
       .then(() => {
@@ -93,14 +92,14 @@ const TaskTable = () => {
           .get(`http://localhost:8000/api/task/${userId}`)
           .then((response) => {
             setTasks(response.data);
-            setFilteredTasks(response.data); 
+            setFilteredTasks(response.data);
             setIsLoading(false);
             Swal.fire({
               icon: 'success',
               title: 'Success!',
               text: 'Task added successfully',
               showConfirmButton: false,
-              timer: 2000, 
+              timer: 2000,
             });
           })
           .catch((error) => {
@@ -195,7 +194,6 @@ const TaskTable = () => {
   const handleSearch = () => {
     setIsLoading(true);
 
-
     const filtered = tasks.filter((task) =>
       task.task.toLowerCase().includes(searchId.toLowerCase())
     );
@@ -227,10 +225,10 @@ const TaskTable = () => {
             onChange={(e) => setSearchId(e.target.value)}
             sx={{ mt: 1 }}
           />
-          <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid container spacing={2} sx={{ mt: 2 , opacity: 0.7 }}>
             {filteredTasks.map((task) => (
-              <Grid item xs={8} md={4} lg={2} key={task.id}>
-                <Card>
+              <Grid item xs={12} md={8} lg={4} key={task.id}>
+                <Card sx={{ width: 400, height: 250 }}>
                   <CardContent>
                     <Avatar alt="avatar" src="https://mui.com/static/images/avatar/1.jpg" />
                     <Typography variant="h5" component="div">
@@ -299,7 +297,9 @@ const TaskTable = () => {
                 variant="outlined"
                 fullWidth
                 value={taskToUpdate.description}
-                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, description: e.target.value })}
+                onChange={(e) =>
+                  setTaskToUpdate({ ...taskToUpdate, description: e.target.value })
+                }
               />
             </DialogContent>
             <DialogActions>
@@ -333,7 +333,9 @@ const TaskTable = () => {
                 variant="outlined"
                 fullWidth
                 value={newTodo.description}
-                onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
+                onChange={(e) =>
+                  setNewTodo({ ...newTodo, description: e.target.value })
+                }
                 sx={{ mt: 1 }}
               />
               <DialogContentText>Task Cannot be null.</DialogContentText>
@@ -349,7 +351,7 @@ const TaskTable = () => {
           </Dialog>
           <Snackbar
             open={snackbarOpen}
-            autoHideDuration={3000} 
+            autoHideDuration={3000}
             onClose={() => setSnackbarOpen(false)}
           >
             <Alert onClose={() => setSnackbarOpen(false)} severity="error">

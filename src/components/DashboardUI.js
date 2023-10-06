@@ -5,7 +5,7 @@ import TaskTable from './TaskTable';
 
 const Dashboard = () => {
     const backgroundStyle = {
-        background: `url('/images/bg.jpg')`, 
+        background: `url('/images/bgmain.jpg')`, 
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
