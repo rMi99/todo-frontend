@@ -215,7 +215,7 @@ const TaskTable = () => {
         <Spinner />
       ) : (
         <div>
-          <Button variant="outlined" color="primary" sx={{ mt: 1 }} onClick={handleOpenAddDialog}>
+          <Button variant="outlined" color="success" sx={{ mt: 1 }} onClick={handleOpenAddDialog}>
             Add Todo
           </Button>
 
