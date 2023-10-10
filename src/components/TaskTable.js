@@ -53,8 +53,7 @@ const TaskTable = () => {
       .get(`http://localhost:8000/api/task/${userId}`)
       .then((response) => {
         setTasks(response.data);
-        setFilteredTasks(response.data); // Initialize filteredTasks with all tasks
-        setIsLoading(false);
+        setFilteredTasks(response.data); 
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -170,8 +169,7 @@ const TaskTable = () => {
           .get(`http://localhost:8000/api/task/${userId}`)
           .then((response) => {
             setTasks(response.data);
-            setFilteredTasks(response.data); // Update filteredTasks after updating a task
-            setIsLoading(false);
+            setFilteredTasks(response.data); 
           })
           .catch((error) => {
             console.error('Error fetching updated data:', error);
@@ -205,7 +203,7 @@ const TaskTable = () => {
 
   useEffect(() => {
     handleSearch();
-  }, [searchId]);
+  });
 
   return (
     <div>
@@ -225,12 +223,12 @@ const TaskTable = () => {
             onChange={(e) => setSearchId(e.target.value)}
             sx={{ mt: 1 }}
           />
-          <Grid container spacing={2} sx={{ mt: 2 , opacity: 0.7 }}>
+          <Grid container spacing={2} sx={{ mt: 2 , opacity: 1.0 }}>
             {filteredTasks.map((task) => (
               <Grid item xs={12} md={8} lg={4} key={task.id}>
                 <Card sx={{ width: 400, height: 250 }}>
                   <CardContent>
-                    <Avatar alt="avatar" src="https://mui.com/static/images/avatar/1.jpg" />
+                    <Avatar alt="" src="https://mui.com/static/images/avatar/" />
                     <Typography variant="h5" component="div">
                       {task.task}
                     </Typography>

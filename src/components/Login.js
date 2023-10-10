@@ -11,13 +11,7 @@ const Login = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
  
-  const backgroundStyle = {
-    background: `url('/images/bgmain.jpg')`, // Path to your background image
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    minHeight: '100vh', 
-  };
+
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -70,14 +64,14 @@ const Login = () => {
   };
 
   return (
-    <div style={backgroundStyle}>
+    <div>
       {isLoading ? (
         <Spinner />
       ) : (
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' ,opacity: '0.8'}}>
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
-              <Avatar style={{ margin: 'auto', backgroundColor: '#f50057' }}>
+              <Avatar style={{ margin: 'auto' }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography variant="h5" style={{ marginTop: '10px' }}>

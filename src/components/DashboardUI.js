@@ -4,13 +4,13 @@ import NavComponent from './NavComponent';
 import TaskTable from './TaskTable';
 
 const Dashboard = () => {
-    const backgroundStyle = {
-        background: `url('/images/bgmain.jpg')`, 
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center center',
-        minHeight: '100vh', 
-      };
+    // const backgroundStyle = {
+    //     background: `url('/images/bgmain.jpg')`, 
+    //     backgroundSize: 'cover',
+    //     backgroundRepeat: 'no-repeat',
+    //     backgroundPosition: 'center center',
+    //     minHeight: '100vh', 
+    //   };
       const contentContainerStyle = {
         margin: '20px', 
       };
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
     return (
         
-        <div style={backgroundStyle}>
+        <div>
             <NavComponent />
         
          <div style={contentContainerStyle}>
