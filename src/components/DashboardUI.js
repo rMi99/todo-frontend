@@ -10,13 +10,14 @@ import theme from './theme';
 const Dashboard = () => {
  
       const contentContainerStyle = {
-        margin: '20px', 
+        backgroundColor: '#e3e6f0', 
+        padding: '20px',
+        height: '100vh',
       };
     
     useEffect(() => {
         const token = localStorage.getItem('token');
        
-        
         axios
             .get('http://localhost:8000/api/user', {
                 headers: {
@@ -35,10 +36,10 @@ const Dashboard = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline>
-        <div>
+        <div style={contentContainerStyle}>
             <NavComponent />
         
-         <div style={contentContainerStyle}>
+         <div>
          <TaskTable />
          
        </div> </div>

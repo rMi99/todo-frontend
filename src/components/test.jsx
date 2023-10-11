@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import {
+  Grid,
   Card,
   CardContent,
   CardActions,
@@ -16,12 +17,13 @@ import {
   Snackbar,
   Alert,
   DialogContentText,
-  Checkbox,
   FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Spinner from './Spinner';
+import Avatar from '@mui/material/Avatar';
 
 const TaskTable = () => {
   const userId = localStorage.getItem('user_id');
@@ -35,16 +37,20 @@ const TaskTable = () => {
     id: null,
     task: '',
     description: '',
+    link: '', // Add 'link' field
     is_completed: false,
-    created_at: '',
+    created_at: '', // Add 'created_at' field
   });
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newTodo, setNewTodo] = useState({
     task: '',
     description: '',
+    link: '', // Add 'link' field
     user_id: userId,
     is_completed: false,
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [searchId, setSearchId] = useState('');
   const [searchedTask, setSearchedTask] = useState(null);
 
@@ -62,15 +68,16 @@ const TaskTable = () => {
       });
   }, [userId]);
 
-//   const handleOpenAddDialog = () => {
-//     setAddDialogOpen(true);
-//   };
+  const handleOpenAddDialog = () => {
+    setAddDialogOpen(true);
+  };
 
   const handleCloseAddDialog = () => {
     setAddDialogOpen(false);
     setNewTodo({
       task: '',
       description: '',
+      link: '',
       user_id: userId,
       is_completed: false,
     });
@@ -81,8 +88,8 @@ const TaskTable = () => {
 
     if (newTodo.task.trim() === '') {
       setIsLoading(false);
-    //   setSnackbarMessage('Task cannot be null.');
-    //   setSnackbarOpen(true);
+      setSnackbarMessage('Task cannot be null.');
+      setSnackbarOpen(true);
       return;
     }
 
@@ -117,10 +124,25 @@ const TaskTable = () => {
       id: task.id,
       task: task.task,
       description: task.description,
+      link: task.link,
       is_completed: task.is_completed,
       created_at: task.created_at,
     });
     setUpdateDialogOpen(true);
+  };
+
+  const handleToggleComplete = (task) => {
+    const updatedTask = { ...task, is_completed: !task.is_completed };
+
+    axios
+      .put(`http://localhost:8000/api/update/${updatedTask.id}`, updatedTask)
+      .then(() => {
+        const updatedTasks = tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t));
+        setTasks(updatedTasks);
+      })
+      .catch((error) => {
+        console.error('Error updating task:', error);
+      });
   };
 
   const handleConfirmDelete = () => {
@@ -130,9 +152,7 @@ const TaskTable = () => {
       axios
         .delete(`http://localhost:8000/api/delete/${taskToDeleteId}`)
         .then(() => {
-          setTasks((prevTasks) =>
-            prevTasks.filter((task) => task.id !== taskToDeleteId)
-          );
+          setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskToDeleteId));
           setDeleteSuccess(true);
           setTaskToDeleteId(null);
           setIsLoading(false);
@@ -142,7 +162,6 @@ const TaskTable = () => {
           setIsLoading(false);
         });
     }
-
     setDeleteDialogOpen(false);
   };
 
@@ -155,31 +174,6 @@ const TaskTable = () => {
     setUpdateDialogOpen(false);
   };
 
-  const handleToggleComplete = (id, isCompleted) => {
-    setIsLoading(true);
-  
-    axios
-      .put(`http://localhost:8000/api/update/${id}`, {
-        is_completed: !isCompleted,
-      })
-      .then(() => {
-        axios
-          .get(`http://localhost:8000/api/task/${userId}`)
-          .then((response) => {
-            setTasks(response.data);
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.error('Error fetching updated data:', error);
-            setIsLoading(false);
-          });
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        console.error('Error updating task:', error);
-      });
-  };
-  
   const handleUpdateTask = () => {
     setIsLoading(true);
 
@@ -204,6 +198,11 @@ const TaskTable = () => {
         console.error('Error updating task:', error);
       });
   };
+  // const redirectLink = (link) =>{
+
+  //   window.location.href(task.link);
+
+  // }
 
   const handleDeleteAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -235,177 +234,239 @@ const TaskTable = () => {
 
   return (
     <div>
-      {/* Task list */}
+      
       {isLoading ? (
         <Spinner />
       ) : (
-        tasks.map((task) => (
-          <Card key={task.id}>
-            <CardContent>
-              <Typography variant="h6">{task.task}</Typography>
-              <Typography variant="body2">{task.description}</Typography>
-              <Typography variant="caption">
-                Created at: {task.created_at}
-              </Typography>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={task.is_completed}
-                    onChange={() =>
-                      handleToggleComplete(task.id, task.is_completed)
-                    }
-                    name="isCompleted"
-                    color="primary"
-                  />
-                }
-                label="Completed"
-              />
-            </CardContent>
-            <CardActions>
-              <IconButton
-                onClick={() => handleDelete(task.id)}
-                color="error"
-                aria-label="delete"
-              >
-                <DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => handleUpdate(task)}
-                color="primary"
-                aria-label="edit"
-              >
-                <EditIcon />
-              </IconButton>
-            </CardActions>
-          </Card>
-        ))
-      )}
-
-      {/* Add Task Dialog */}
-      <Dialog open={addDialogOpen} onClose={handleCloseAddDialog}>
-        <DialogTitle>Add Task</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Task"
-            value={newTodo.task}
-            onChange={(e) =>
-              setNewTodo({ ...newTodo, task: e.target.value })
-            }
-            fullWidth
-          />
-          <TextField
-            label="Description"
-            value={newTodo.description}
-            onChange={(e) =>
-              setNewTodo({ ...newTodo, description: e.target.value })
-            }
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddDialog}>Cancel</Button>
-          <Button onClick={handleAddTodo} color="primary">
-            Add
+        <div>
+          <Button variant="contained"  sx={{ mt: 1 }} style={{ backgroundColor: '#9150F0', color: '#ffff'}} onClick={handleOpenAddDialog}>
+            Add Todo
           </Button>
-        </DialogActions>
-      </Dialog>
 
-      {/* Update Task Dialog */}
-      <Dialog open={updateDialogOpen} onClose={handleUpdateDialogClose}>
-        <DialogTitle>Edit Task</DialogTitle>
-        <DialogContent>
           <TextField
-            label="Task"
-            value={taskToUpdate.task}
-            onChange={(e) =>
-              setTaskToUpdate({ ...taskToUpdate, task: e.target.value })
-            }
+            label="Search by ID"
+            variant="outlined"
             fullWidth
+            value={searchId}
+            onChange={(e) => setSearchId(e.target.value)}
+            sx={{ mt: 1 }}
           />
-          <TextField
-            label="Description"
-            value={taskToUpdate.description}
-            onChange={(e) =>
-              setTaskToUpdate({
-                ...taskToUpdate,
-                description: e.target.value,
-              })
-            }
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleUpdateDialogClose}>Cancel</Button>
-          <Button onClick={handleUpdateTask} color="primary">
-            Update
+          <Button variant="contained" style={{ backgroundColor: '#9150F0', color: '#ffff'}}
+ onClick={handleSearch}>
+            Search
           </Button>
-        </DialogActions>
-      </Dialog>
 
-      {/* Delete Task Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Confirm Delete</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this task?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmDelete} color="error">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Snackbar for Success Message */}
-      <Snackbar
-        open={deleteSuccess}
-        autoHideDuration={3000}
-        onClose={handleDeleteAlertClose}
-      >
-        <Alert onClose={handleDeleteAlertClose} severity="success">
-          Task deleted successfully!
-        </Alert>
-      </Snackbar>
-
-      {/* Search Task */}
-      <TextField
-        label="Search by ID"
-        value={searchId}
-        onChange={(e) => setSearchId(e.target.value)}
-        fullWidth
-      />
-      <Button onClick={handleSearch} variant="contained" color="primary">
-        Search
-      </Button>
-
-      {/* Display Searched Task */}
-      {searchedTask && (
-        <Card>
-          <CardContent>
-            <Typography variant="h6">{searchedTask.task}</Typography>
-            <Typography variant="body2">{searchedTask.description}</Typography>
-            <Typography variant="caption">
-              Created at: {searchedTask.created_at}
-            </Typography>
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            {searchedTask ? (
+              <Grid item xs={6}>
+                <Card >
+                  <CardContent>
+                    <Avatar alt="avatar" src="" />
+                    <Typography variant="h5" component="div">
+                      {searchedTask.task}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {searchedTask.description}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {searchedTask.link}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Created at: {searchedTask.created_at}
+                    </Typography>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={searchedTask.is_completed}
+                          onChange={() => handleToggleComplete(searchedTask)}
+                          name="isCompleted"
+                          color="primary"
+                        />
+                      }
+                      label="Completed"
+                    />
+                  </CardContent>
+                  <CardActions>
+                    <IconButton onClick={() => handleUpdate(searchedTask)} color="success">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(searchedTask.id)} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ) : (
+              tasks.map((task) => (
+                <Grid item xs={8} md={4} lg={2} key={task.id}>
+                  <Card >
+                    <CardContent>
+                      {/* <Avatar alt="avatar" src="" /> */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={searchedTask.is_completed}
+                  checked={task.is_completed}
+                  onChange={() => handleToggleComplete(task)}
                   name="isCompleted"
                   color="primary"
-                  disabled
                 />
               }
               label="Completed"
             />
-          </CardContent>
-        </Card>
+          </div>
+                      <Typography variant="h5" component="div">
+                        {task.task}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {task.description}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                       {/* <a  href='{task.link}'></a> */}
+                       <a href={'http://'+task.link} target="_blank" rel="noreferrer"> {task.link} </a>
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Created at: {task.created_at}
+                      </Typography>
+                
+                    </CardContent>
+                    <CardActions>
+                      <IconButton onClick={() => handleUpdate(task)} color="success">
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(task.id)} color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))
+            )}
+          </Grid>
+
+          <Snackbar open={deleteSuccess} autoHideDuration={3000} onClose={handleDeleteAlertClose}>
+            <Alert onClose={handleDeleteAlertClose} severity="success">
+              Task deleted successfully!
+            </Alert>
+          </Snackbar>
+
+          <Dialog
+            open={deleteDialogOpen}
+            onClose={handleCancelDelete}
+            aria-labelledby="delete-dialog-title"
+            aria-describedby="delete-dialog-description"
+          >
+            <DialogTitle id="delete-dialog-title">Confirm Delete</DialogTitle>
+            <DialogContent>Are you sure you want to delete this task?</DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelDelete} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmDelete} color="secondary">
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={updateDialogOpen}
+            onClose={handleUpdateDialogClose}
+            aria-labelledby="update-dialog-title"
+            aria-describedby="update-dialog-description"
+          >
+            <DialogTitle id="update-dialog-title">Edit Task</DialogTitle>
+            <DialogContent>
+              <TextField
+                sx={{ mt: 1 }}
+                label="Task"
+                variant="outlined"
+                fullWidth
+                value={taskToUpdate.task}
+                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, task: e.target.value })}
+              />
+              <TextField
+                sx={{ mt: 1 }}
+                label="Description"
+                variant="outlined"
+                fullWidth
+                value={taskToUpdate.description}
+                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, description: e.target.value })}
+              />
+              <TextField
+                sx={{ mt: 1 }}
+                label="Link"
+                variant="outlined"
+                fullWidth
+                value={taskToUpdate.link}
+                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, link: e.target.value })}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleUpdateDialogClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleUpdateTask} color="primary">
+                Update
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={addDialogOpen}
+            onClose={handleCloseAddDialog}
+            aria-labelledby="add-dialog-title"
+            aria-describedby="add-dialog-description"
+          >
+            <DialogTitle id="add-dialog-title">Add Todo</DialogTitle>
+            <DialogContent>
+              <TextField
+                label="Task"
+                variant="outlined"
+                fullWidth
+                value={newTodo.task}
+                onChange={(e) => setNewTodo({ ...newTodo, task: e.target.value })}
+                sx={{ mt: 1 }}
+              />
+              <TextField
+                label="Description"
+                variant="outlined"
+                fullWidth
+                value={newTodo.description}
+                onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
+                sx={{ mt: 1 }}
+              />
+              <TextField
+                label="Link"
+                variant="outlined"
+                fullWidth
+                value={newTodo.link}
+                onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
+                sx={{ mt: 1 }}
+              />
+              <DialogContentText>Task Cannot be null.</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseAddDialog} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleAddTodo} color="primary">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            <Alert onClose={() => setSnackbarOpen(false)} severity="error">
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+        </div>
       )}
     </div>
+    
   );
 };
 

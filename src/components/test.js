@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
+import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import {
   Grid,
@@ -23,7 +23,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Spinner from './Spinner';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
 
 const TaskTable = () => {
   const userId = localStorage.getItem('user_id');
@@ -32,24 +32,28 @@ const TaskTable = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDeleteId, setTaskToDeleteId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [taskToUpdate, setTaskToUpdate] = useState({
     id: null,
     task: '',
     description: '',
-    is_completed: false, // Added is_completed field
+    link: '',
+    is_completed: false,
+    created_at: '',
   });
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newTodo, setNewTodo] = useState({
     task: '',
     description: '',
+    link: '',
     user_id: userId,
-    is_completed: false, // Added is_completed field
+    is_completed: false,
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [searchId, setSearchId] = useState('');
-  const [searchedTask, setSearchedTask] = useState(null);
+  // const [searchedTask, setSearchedTask] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -74,8 +78,9 @@ const TaskTable = () => {
     setNewTodo({
       task: '',
       description: '',
+      link: '',
       user_id: userId,
-      is_completed: false, // Reset is_completed
+      is_completed: false,
     });
   };
 
@@ -120,7 +125,9 @@ const TaskTable = () => {
       id: task.id,
       task: task.task,
       description: task.description,
-      is_completed: task.is_completed, // Initialize is_completed
+      link: task.link,
+      is_completed: task.is_completed,
+      created_at: task.created_at,
     });
     setUpdateDialogOpen(true);
   };
@@ -147,6 +154,7 @@ const TaskTable = () => {
         .delete(`http://localhost:8000/api/delete/${taskToDeleteId}`)
         .then(() => {
           setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskToDeleteId));
+          setFilteredTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskToDeleteId));
           setDeleteSuccess(true);
           setTaskToDeleteId(null);
           setIsLoading(false);
@@ -181,6 +189,7 @@ const TaskTable = () => {
           .then((response) => {
             setTasks(response.data);
             setIsLoading(false);
+            setFilteredTasks(response.data);
           })
           .catch((error) => {
             console.error('Error fetching updated data:', error);
@@ -203,23 +212,17 @@ const TaskTable = () => {
   const handleSearch = () => {
     setIsLoading(true);
 
-    axios
-      .get(`http://localhost:8000/api/show/${searchId}/${userId}`)
-      .then((response) => {
-        setSearchedTask(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching task by ID:', error);
-        setSearchedTask(null);
-        setIsLoading(false);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No Task Found!!',
-        });
-      });
+    const filtered = tasks.filter((task) =>
+      task.task.toLowerCase().includes(searchId.toLowerCase())
+    );
+
+    setFilteredTasks(filtered);
+
+    setIsLoading(false);
   };
+  useEffect(() => {
+    handleSearch();
+  });
 
   return (
     <div>
@@ -227,68 +230,39 @@ const TaskTable = () => {
         <Spinner />
       ) : (
         <div>
-          <Button variant="outlined" color="primary" sx={{ mt: 1 }} onClick={handleOpenAddDialog}>
-            Add Todo
-          </Button>
-
-          <TextField
-            label="Search by ID"
-            variant="outlined"
-            fullWidth
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-            sx={{ mt: 1 }}
-          />
-          <Button variant="outlined" color="primary" onClick={handleSearch}>
-            Search
-          </Button>
-
+        <Button
+  variant="contained"
+  sx={{ mt: 1 }}
+  style={{ backgroundColor: '#9150F0', color: '#ffff' }}
+  onClick={handleOpenAddDialog}
+  startIcon={<AddIcon />} // This adds the icon to the left of the button text
+>
+  Add Todo
+</Button>
+<TextField
+  label="Search by Task Name"
+  variant="outlined" // Use 'standard' variant for the underline style
+  fullWidth
+  value={searchId}
+  onChange={(e) => setSearchId(e.target.value)}
+  InputProps={{
+    style: {
+      borderBottom: '1px solid #000', // Customize the underline style
+    },
+  }}
+  InputLabelProps={{
+    shrink: true, // This ensures the label floats when you start typing
+  }}
+  sx={{ mt: 1 }}
+/>
+   
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            {searchedTask ? (
-              <Grid item xs={6}>
+            {filteredTasks.map((task) => (
+              <Grid item xs={8} md={4} lg={2} key={task.id}>
                 <Card>
                   <CardContent>
-                    <Avatar alt="avatar" src="https://mui.com/static/images/avatar/1.jpg" />
-                    <Typography variant="h5" component="div">
-                      {searchedTask.task}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {searchedTask.description}
-                    </Typography>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={searchedTask.is_completed}
-                          onChange={() => handleToggleComplete(searchedTask)}
-                          name="isCompleted"
-                          color="primary"
-                        />
-                      }
-                      label="Completed"
-                    />
-                  </CardContent>
-                  <CardActions>
-                    <IconButton onClick={() => handleUpdate(searchedTask)} color="success">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(searchedTask.id)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ) : (
-              tasks.map((task) => (
-                <Grid item xs={8} md={4} lg={2} key={task.id}>
-                  <Card>
-                    <CardContent>
-                      <Avatar alt="avatar" src="https://mui.com/static/images/avatar/1.jpg" />
-                      <Typography variant="h5" component="div">
-                        {task.task}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {task.description}
-                      </Typography>
+                    {/* <Avatar alt="avatar" src="" /> */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -300,19 +274,33 @@ const TaskTable = () => {
                         }
                         label="Completed"
                       />
-                    </CardContent>
-                    <CardActions>
-                      <IconButton onClick={() => handleUpdate(task)} color="success">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(task.id)} color="error">
-                        <DeleteIcon />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))
-            )}
+                    </div>
+                    <Typography variant="h5" component="div">
+                      {task.task}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {task.description}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <a href={'http://' + task.link} target="_blank" rel="noreferrer">
+                        {task.link}
+                      </a>
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Created at: {task.created_at}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <IconButton onClick={() => handleUpdate(task)} color="success">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(task.id)} color="error">
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
 
           <Snackbar open={deleteSuccess} autoHideDuration={3000} onClose={handleDeleteAlertClose}>
@@ -361,7 +349,17 @@ const TaskTable = () => {
                 variant="outlined"
                 fullWidth
                 value={taskToUpdate.description}
-                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, description: e.target.value })}
+                onChange={(e) =>
+                  setTaskToUpdate({ ...taskToUpdate, description: e.target.value })
+                }
+              />
+              <TextField
+                sx={{ mt: 1 }}
+                label="Link"
+                variant="outlined"
+                fullWidth
+                value={taskToUpdate.link}
+                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, link: e.target.value })}
               />
             </DialogContent>
             <DialogActions>
@@ -395,7 +393,17 @@ const TaskTable = () => {
                 variant="outlined"
                 fullWidth
                 value={newTodo.description}
-                onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
+                onChange={(e) =>
+                  setNewTodo({ ...newTodo, description: e.target.value })
+                }
+                sx={{ mt: 1 }}
+              />
+              <TextField
+                label="Link"
+                variant="outlined"
+                fullWidth
+                value={newTodo.link}
+                onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
                 sx={{ mt: 1 }}
               />
               <DialogContentText>Task Cannot be null.</DialogContentText>
@@ -425,4 +433,3 @@ const TaskTable = () => {
 };
 
 export default TaskTable;
-
