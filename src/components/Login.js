@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Paper, Avatar, Typography, TextField, Button, Snackbar } from '@mui/material';
+import { Grid, Paper, Typography, TextField, Button, Snackbar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Spinner from './Spinner';
 import axios from 'axios';
@@ -12,11 +12,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
  
   const backgroundStyle = {
-    background: `url('/images/bgmain.jpg')`, // Path to your background image
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    minHeight: '100vh', 
+    backgroundColor: '#e3e6f0',
   };
 
   const handleLogin = async () => {
@@ -77,9 +73,9 @@ const Login = () => {
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' ,opacity: '0.8'}}>
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
-              <Avatar style={{ margin: 'auto', backgroundColor: '#f50057' }}>
+           
                 <LockOutlinedIcon />
-              </Avatar>
+           
               <Typography variant="h5" style={{ marginTop: '10px' }}>
                 Login
               </Typography>
@@ -108,7 +104,7 @@ const Login = () => {
                 onClick={handleLogin}
                 style={{
                   margin: '5px 0',
-                  backgroundColor: '#79AC78',
+                  backgroundColor: '#9150F0',
                 }}
               >
                 Login
@@ -120,7 +116,7 @@ const Login = () => {
                 onClick={handleRegisterClick}
                 style={{
                   margin: '5px 0',
-                  backgroundColor: '#79AC78',
+                  backgroundColor: '#9150F0',
                 }}
               >
                 Register

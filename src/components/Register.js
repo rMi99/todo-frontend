@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Paper, Avatar, Typography, TextField, Button, Snackbar } from '@mui/material';
+import { Grid, Paper, Typography, TextField, Button, Snackbar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import axios from 'axios';
 import Spinner from './Spinner';
@@ -18,13 +18,7 @@ const Register = () => {
     return emailPattern.test(email);
   };
 
-  const backgroundStyle = {
-    background: `url('/images/bgmain.jpg')`, // Path to your background image
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center center',
-    minHeight: '100vh', 
-  };
+
 
   const handleRegister = async () => {
   
@@ -84,16 +78,16 @@ const Register = () => {
     setOpenAlert(false);
   };
   return (
-    <div style={backgroundStyle}>
+    <div >
       {isLoading ? (
         <Spinner />
       ) : (
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' ,opacity: '0.8'}}>
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
-              <Avatar style={{ margin: 'auto', backgroundColor: '#f50057' }}>
+             
                 <LockOutlinedIcon />
-              </Avatar>
+            
               <Typography variant="h5" style={{ marginTop: '10px' }}>
                 Register
               </Typography>
@@ -124,13 +118,14 @@ const Register = () => {
                 style={{ margin: '10px 0' }}
               />
               <Button
-                variant="contained"
+                variant="outlined"
                 color="primary"
                 fullWidth
                 onClick={handleRegister}
                 style={{
                   margin: '5px 0',
-                  backgroundColor: '#79AC78',
+                  backgroundColor: '#9150F0',
+                  color:'white',
                 }}
               >
                 Register
@@ -142,7 +137,7 @@ const Register = () => {
                 onClick={handleLoginClick}
                 style={{
                   margin: '5px 0',
-                  backgroundColor: '#79AC78',
+                  backgroundColor: '#9150F0',
                 }}
               >
                 Jump to Login

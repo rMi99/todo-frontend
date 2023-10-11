@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import './TaskTable.css';
 import {
   Grid,
   Card,
@@ -16,16 +17,22 @@ import {
   TextField,
   Snackbar,
   Alert,
-  DialogContentText,
+  CardHeader,
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
+
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Spinner from './Spinner';
-// import Avatar from '@mui/material/Avatar';
+import Switch from '@mui/material/Switch';
+
+
 
 const TaskTable = () => {
+  const [showCompletedTasks, setShowCompletedTasks] = useState(false);
+
   const userId = localStorage.getItem('user_id');
   const [tasks, setTasks] = useState([]);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -53,19 +60,19 @@ const TaskTable = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [searchId, setSearchId] = useState('');
-  // const [searchedTask, setSearchedTask] = useState(null);
+
 
   useEffect(() => {
-    setIsLoading(true);
+  
     axios
       .get(`http://localhost:8000/api/task/${userId}`)
       .then((response) => {
         setTasks(response.data);
-        setIsLoading(false);
+      
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setIsLoading(false);
+       
       });
   }, [userId]);
 
@@ -85,12 +92,10 @@ const TaskTable = () => {
   };
 
   const handleAddTodo = () => {
-    setIsLoading(true);
+  
 
     if (newTodo.task.trim() === '') {
-      setIsLoading(false);
-      setSnackbarMessage('Task cannot be null.');
-      setSnackbarOpen(true);
+      setNewTodo({ ...newTodo, error: true });
       return;
     }
 
@@ -118,6 +123,8 @@ const TaskTable = () => {
   const handleDelete = (id) => {
     setTaskToDeleteId(id);
     setDeleteDialogOpen(true);
+    setSnackbarMessage("Deleted");
+
   };
 
   const handleUpdate = (task) => {
@@ -176,8 +183,10 @@ const TaskTable = () => {
     setUpdateDialogOpen(false);
   };
 
+
+
+
   const handleUpdateTask = () => {
-    setIsLoading(true);
 
     axios
       .put(`http://localhost:8000/api/update/${taskToUpdate.id}`, taskToUpdate)
@@ -188,7 +197,6 @@ const TaskTable = () => {
           .get(`http://localhost:8000/api/task/${userId}`)
           .then((response) => {
             setTasks(response.data);
-            setIsLoading(false);
             setFilteredTasks(response.data);
           })
           .catch((error) => {
@@ -209,17 +217,18 @@ const TaskTable = () => {
     setDeleteSuccess(false);
   };
 
+
   const handleSearch = () => {
-    setIsLoading(true);
-
     const filtered = tasks.filter((task) =>
-      task.task.toLowerCase().includes(searchId.toLowerCase())
+      task.task.toLowerCase().includes(searchId.toLowerCase()) &&
+      (showCompletedTasks ? task.is_completed : true)
     );
-
+  
     setFilteredTasks(filtered);
-
     setIsLoading(false);
   };
+  
+
   useEffect(() => {
     handleSearch();
   });
@@ -230,78 +239,132 @@ const TaskTable = () => {
         <Spinner />
       ) : (
         <div>
-        <Button
-  variant="contained"
-  sx={{ mt: 1 }}
-  style={{ backgroundColor: '#9150F0', color: '#ffff' }}
-  onClick={handleOpenAddDialog}
-  startIcon={<AddIcon />} // This adds the icon to the left of the button text
->
-  Add Todo
-</Button>
+
+<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+
+
+<FormControlLabel
+  control={
+    <Switch
+      checked={showCompletedTasks}
+      onChange={() => setShowCompletedTasks(!showCompletedTasks)}
+      name="showCompletedTasks"
+      color="primary"
+    />
+  }
+  label="Show Completed"
+  sx={{
+    marginTop: 2,
+    marginLeft: '10px',
+  }}
+/>
+
+
+  <Button
+    variant="contained"
+    sx={{
+      mt: 1,
+    }}
+    style={{ backgroundColor: '#9150F0', color: '#ffffff' }}
+    onClick={handleOpenAddDialog}
+    startIcon={<AddIcon />}
+  >
+    Add Todo
+  </Button>
+</div>
+
+
 <TextField
-  label="Search by Task Name"
-  variant="outlined" // Use 'standard' variant for the underline style
+ 
+  placeholder="Enter task name..." 
+  variant="standard" 
   fullWidth
   value={searchId}
   onChange={(e) => setSearchId(e.target.value)}
   InputProps={{
     style: {
-      borderBottom: '1px solid #000', // Customize the underline style
+   
+      borderBottom: '3px solid #9150F0',
+      justifyContent: 'center',
+      top: '-115px',
+      width: '23%',
+      left: '64.5%',
+      borderRadius: '10px',
     },
   }}
   InputLabelProps={{
-    shrink: true, // This ensures the label floats when you start typing
+    shrink: true, 
   }}
-  sx={{ mt: 1 }}
+  sx={{ mt: 2.5 }}
 />
-   
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            {filteredTasks.map((task) => (
-              <Grid item xs={8} md={4} lg={2} key={task.id}>
-                <Card>
-                  <CardContent>
-                    {/* <Avatar alt="avatar" src="" /> */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={task.is_completed}
-                            onChange={() => handleToggleComplete(task)}
-                            name="isCompleted"
-                            color="primary"
-                          />
-                        }
-                        label="Completed"
-                      />
-                    </div>
-                    <Typography variant="h5" component="div">
-                      {task.task}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {task.description}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      <a href={'http://' + task.link} target="_blank" rel="noreferrer">
-                        {task.link}
-                      </a>
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Created at: {task.created_at}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <IconButton onClick={() => handleUpdate(task)} color="success">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(task.id)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+
+<div>
+      {filteredTasks.length === 0 ? ( 
+       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+          <img src='./images/no.svg' style={{width:'30%',height:'25%',}} alt="No Task Found" />
+         
+         
+        </div>
+         
+      ) : (
+        <Grid container spacing={2} sx={{ mt: 1 }} style={{ justifyContent: 'center'}}>
+          {filteredTasks.map((task) => (
+            <Grid item xs={8} md={4} lg={2} key={task.id}>
+              <Card>
+              <CardHeader 
+  title={task.task}
+  style={{
+    borderBottom: '2px solid #c1a4eb'
+  }}
+/>
+                <CardContent sx={{ position: 'relative' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={task.is_completed}
+                          onChange={() => handleToggleComplete(task)}
+                          name="isCompleted"
+                          className={task.is_completed ? 'checked-checkbox' : 'unchecked-checkbox'}
+                        />
+                      }
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        position: 'absolute',
+                        top: '-55px',
+                        right: '0px',
+                      }}
+                    />
+                  </div>
+                  <Typography variant="body2" color="text.secondary">
+                    {task.description}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    <a href={'http://' + task.link} target="_blank" rel="noreferrer">
+                      {task.link}
+                    </a>
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ position: 'absolute', top: '97px' }}>
+                    {task.created_at}
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'flex-end' }}>
+                  <IconButton onClick={() => handleUpdate(task)} color="success">
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(task.id)} color="error">
+                    <DeleteIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      )}
+    </div>
+  
 
           <Snackbar open={deleteSuccess} autoHideDuration={3000} onClose={handleDeleteAlertClose}>
             <Alert onClose={handleDeleteAlertClose} severity="success">
@@ -380,14 +443,28 @@ const TaskTable = () => {
           >
             <DialogTitle id="add-dialog-title">Add Todo</DialogTitle>
             <DialogContent>
-              <TextField
-                label="Task"
-                variant="outlined"
-                fullWidth
-                value={newTodo.task}
-                onChange={(e) => setNewTodo({ ...newTodo, task: e.target.value })}
-                sx={{ mt: 1 }}
-              />
+            <TextField
+      label="Task"
+      variant="outlined"
+      fullWidth
+      value={newTodo.task}
+      onChange={(e) => setNewTodo({ ...newTodo, task: e.target.value, error: false })}
+      error={newTodo.error}
+      sx={{ mt: 1 }}
+      InputProps={{
+        style: {
+          borderBottom: newTodo.error ? '2px solid red' : '1px solid #000',
+        },
+      }}
+      InputLabelProps={{
+        shrink: true,
+      }}
+    />
+    {newTodo.error && (
+      <Typography variant="body2" color="error">
+        We Require The Task Field.
+      </Typography>
+    )}
               <TextField
                 label="Description"
                 variant="outlined"
@@ -406,7 +483,6 @@ const TaskTable = () => {
                 onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
                 sx={{ mt: 1 }}
               />
-              <DialogContentText>Task Cannot be null.</DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseAddDialog} color="primary">
