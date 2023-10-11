@@ -1,16 +1,14 @@
 import React, { useEffect  } from 'react';
 import axios from 'axios';
 import NavComponent from './NavComponent';
-import TaskTable from './TaskTable';
+import TaskTable from './test';
+// import TaskTable from './TaskTable';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
 
 const Dashboard = () => {
-    const backgroundStyle = {
-        background: `url('/images/bg.jpg')`, 
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center center',
-        minHeight: '100vh', 
-      };
+ 
       const contentContainerStyle = {
         margin: '20px', 
       };
@@ -35,13 +33,17 @@ const Dashboard = () => {
     }, []);
 
     return (
-        
-        <div style={backgroundStyle}>
+        <ThemeProvider theme={theme}>
+            <CssBaseline>
+        <div>
             <NavComponent />
         
          <div style={contentContainerStyle}>
          <TaskTable />
+         
        </div> </div>
+       </CssBaseline>
+       </ThemeProvider>
     );
 };
 
