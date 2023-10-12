@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Paper, Typography, TextField, Button, Snackbar } from '@mui/material';
+import { Grid, Paper, Typography, TextField, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Spinner from './Spinner';
 import axios from 'axios';
@@ -7,26 +7,33 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [openAlert, setOpenAlert] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
- 
+
   const backgroundStyle = {
     backgroundColor: '#e3e6f0',
   };
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      setMessage('Email and password cannot be empty.');
-      setOpenAlert(true);
+    // Reset error messages
+    setEmailError('');
+    setPasswordError('');
+
+    if (!email) {
+      setEmailError('Email cannot be empty.');
+      return;
+    }
+
+    if (!password) {
+      setPasswordError('Password cannot be empty.');
       return;
     }
 
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     if (!emailPattern.test(email)) {
-      setMessage('Please enter a valid email address.');
-      setOpenAlert(true);
+      setEmailError('Please enter a valid email address.');
       return;
     }
 
@@ -51,8 +58,7 @@ const Login = () => {
       window.location.href = '/dashboard';
       setIsLoading(false);
     } catch (error) {
-      setMessage('Login failed. Please check your credentials.');
-      setOpenAlert(true);
+      setPasswordError('Login failed. Please check your credentials.');
       setIsLoading(false);
     }
   };
@@ -61,21 +67,15 @@ const Login = () => {
     window.location.href = '/register';
   };
 
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-
   return (
     <div style={backgroundStyle}>
       {isLoading ? (
         <Spinner />
       ) : (
-        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' ,opacity: '0.8'}}>
+        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh', opacity: '0.8' }}>
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
-           
-                <LockOutlinedIcon />
-           
+              <LockOutlinedIcon />
               <Typography variant="h5" style={{ marginTop: '10px' }}>
                 Login
               </Typography>
@@ -87,6 +87,8 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ margin: '20px 0' }}
+                error={!!emailError}
+                helperText={emailError}
               />
               <TextField
                 label="Password"
@@ -96,6 +98,8 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 style={{ margin: '10px 0' }}
+                error={!!passwordError}
+                helperText={passwordError}
               />
               <Button
                 variant="contained"
@@ -121,13 +125,6 @@ const Login = () => {
               >
                 Register
               </Button>
-              <Snackbar
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                open={openAlert}
-                autoHideDuration={3000}
-                onClose={handleCloseAlert}
-                message={message}
-              />
             </Paper>
           </Grid>
         </Grid>

@@ -182,10 +182,6 @@ const TaskTable = () => {
   const handleUpdateDialogClose = () => {
     setUpdateDialogOpen(false);
   };
-
-
-
-
   const handleUpdateTask = () => {
 
     axios
@@ -509,3 +505,6 @@ const TaskTable = () => {
 };
 
 export default TaskTable;
+
+
+
