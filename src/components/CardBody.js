@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
-import './TaskTable.css';
+import './CardBody.css';
 import {
   Grid,
   Card,
@@ -150,7 +150,8 @@ const TaskTable = () => {
   };
 
   const handleConfirmDelete = () => {
-  
+    setIsLoading(true);
+
     if (taskToDeleteId) {
       axios
         .delete(`http://localhost:8000/api/delete/${taskToDeleteId}`)
