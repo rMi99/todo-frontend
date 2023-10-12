@@ -27,12 +27,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Spinner from './Spinner';
 import Switch from '@mui/material/Switch';
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TaskTable = () => {
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
-
   const userId = localStorage.getItem('user_id');
   const [tasks, setTasks] = useState([]);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -61,9 +60,7 @@ const TaskTable = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [searchId, setSearchId] = useState('');
 
-
   useEffect(() => {
-  
     axios
       .get(`http://localhost:8000/api/task/${userId}`)
       .then((response) => {
@@ -90,10 +87,8 @@ const TaskTable = () => {
       is_completed: false,
     });
   };
-
   const handleAddTodo = () => {
   
-
     if (newTodo.task.trim() === '') {
       setNewTodo({ ...newTodo, error: true });
       return;
@@ -107,6 +102,7 @@ const TaskTable = () => {
           .then((response) => {
             setTasks(response.data);
             setIsLoading(false);
+            toast("successfully Added..!!");
           })
           .catch((error) => {
             console.error('Error fetching updated data:', error);
@@ -154,8 +150,7 @@ const TaskTable = () => {
   };
 
   const handleConfirmDelete = () => {
-    setIsLoading(true);
-
+  
     if (taskToDeleteId) {
       axios
         .delete(`http://localhost:8000/api/delete/${taskToDeleteId}`)
@@ -188,12 +183,12 @@ const TaskTable = () => {
       .put(`http://localhost:8000/api/update/${taskToUpdate.id}`, taskToUpdate)
       .then(() => {
         setUpdateDialogOpen(false);
-
         axios
           .get(`http://localhost:8000/api/task/${userId}`)
           .then((response) => {
             setTasks(response.data);
-            setFilteredTasks(response.data);
+        toast.success('Task Updated successfully', { autoClose: 3000 });
+        setFilteredTasks(response.data);
           })
           .catch((error) => {
             console.error('Error fetching updated data:', error);
@@ -213,7 +208,6 @@ const TaskTable = () => {
     setDeleteSuccess(false);
   };
 
-
   const handleSearch = () => {
     const filtered = tasks.filter((task) =>
       task.task.toLowerCase().includes(searchId.toLowerCase()) &&
@@ -224,7 +218,6 @@ const TaskTable = () => {
     setIsLoading(false);
   };
   
-
   useEffect(() => {
     handleSearch();
   });
@@ -237,7 +230,6 @@ const TaskTable = () => {
         <div>
 
 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-
 
 <FormControlLabel
   control={
@@ -254,8 +246,6 @@ const TaskTable = () => {
     marginLeft: '10px',
   }}
 />
-
-
   <Button
     variant="contained"
     sx={{
@@ -268,10 +258,7 @@ const TaskTable = () => {
     Add Todo
   </Button>
 </div>
-
-
-<TextField
- 
+<TextField 
   placeholder="Enter task name..." 
   variant="standard" 
   fullWidth
@@ -279,7 +266,6 @@ const TaskTable = () => {
   onChange={(e) => setSearchId(e.target.value)}
   InputProps={{
     style: {
-   
       borderBottom: '3px solid #9150F0',
       justifyContent: 'center',
       top: '-115px',
@@ -312,6 +298,7 @@ const TaskTable = () => {
   title={task.task}
   style={{
     borderBottom: '2px solid #c1a4eb'
+    // borderBottom: '2px solid #E3E6F0'
   }}
 />
                 <CardContent sx={{ position: 'relative' }}>
@@ -331,13 +318,15 @@ const TaskTable = () => {
                         position: 'absolute',
                         top: '-55px',
                         right: '0px',
+                        
                       }}
                     />
                   </div>
                   <Typography variant="body2" color="text.secondary">
                     {task.description}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{     position: 'relative',
+    top: '39px' }}>
                     <a href={'http://' + task.link} target="_blank" rel="noreferrer">
                       {task.link}
                     </a>
@@ -359,9 +348,9 @@ const TaskTable = () => {
           ))}
         </Grid>
       )}
+  <ToastContainer position="top-right" autoClose={5000} theme='dark' />
     </div>
   
-
           <Snackbar open={deleteSuccess} autoHideDuration={3000} onClose={handleDeleteAlertClose}>
             <Alert onClose={handleDeleteAlertClose} severity="success">
               Task deleted successfully!
