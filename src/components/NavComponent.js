@@ -9,10 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MoreIcon from '@mui/icons-material/MoreVert';
-
-
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,6 +40,11 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+  const handleProfilePageOpen = () => {
+
+    window.location.href = '/profile' ;
+
+  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -65,7 +67,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>You Login as : {userName}</MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>You Login as : {userName}</MenuItem>
       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
     </Menu>
   );
@@ -88,30 +90,9 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
      
-     <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <ExitToAppIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+     <MenuItem onClick={handleProfilePageOpen}>You Login as : {userName}</MenuItem>
+      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+   
     </Menu>
   );
 
@@ -133,9 +114,9 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' ,fontFamily:'system-ui', } }}
           >
-           Todo Application
+           Well-Timed
           </Typography>
         
           <Box sx={{ flexGrow: 1 }} />
