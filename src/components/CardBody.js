@@ -407,7 +407,7 @@ if (dateString && dateString.length === 8) {
         <Grid container spacing={2} sx={{ mt: 1 }} style={{ justifyContent: 'center'}}>
           {filteredTasks.map((task) => (
             <Grid item xs={8} md={4} lg={2} key={task.id}>
-              <Card>
+              <Card style={{ minHeight:'100%', }}>
               <CardHeader 
   title={task.task}
   style={{
