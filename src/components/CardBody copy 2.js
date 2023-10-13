@@ -36,11 +36,11 @@ import './CardBody.css'
 const CardBody = () => {
 
   const [startDate, setStartDate] = useState(new Date());
+
+  // const [value, setValue] = useState(null);
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
   const userId = localStorage.getItem('user_id');
   const [tasks, setTasks] = useState([]);
-
-  const [taskDueDate, setTaskDueDate] = useState(null);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [taskToDeleteId, setTaskToDeleteId] = useState(null);
@@ -54,7 +54,7 @@ const CardBody = () => {
     link: '',
     is_completed: false,
     created_at: '',
-    due_date: null,
+    due_date: Date,
   });
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newTodo, setNewTodo] = useState({
@@ -63,7 +63,7 @@ const CardBody = () => {
     link: '',
     user_id: userId,
     is_completed: false,
-    due_date: null,
+    due_date: '',
   });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -94,27 +94,16 @@ const CardBody = () => {
       link: ' ',
       user_id: userId,
       is_completed: false,
-      due_date:null,
+      due_date:'',
     });
   };
   const handleAddTodo = () => {
+  
     if (newTodo.task.trim() === '') {
       setNewTodo({ ...newTodo, error: true });
       return;
     }
-    
-  console.log(startDate);
-  const originalDate = new Date(startDate);
-  const year = originalDate.getFullYear();
-  const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); 
-  const day = originalDate.getDate().toString().padStart(2, '0');
-  const formattedDate = `${year}${month}${day}`;
 
-  console.log(formattedDate);
-
-
-
-   newTodo.due_date = formattedDate;
     axios
       .post('http://localhost:8000/api/create', newTodo)
       .then(() => {
@@ -123,22 +112,24 @@ const CardBody = () => {
           .then((response) => {
             setTasks(response.data);
             setIsLoading(false);
-            toast("Successfully Added..!!");
+            toast("successfully Added..!!");
           })
           .catch((error) => {
             console.error('Error fetching updated data:', error);
             setIsLoading(false);
-            toast.error('Error!!', error);
+    toast.error('Error!! Plz Check Your Internet Connection(DB).. task:', error);
+
           });
         handleCloseAddDialog();
       })
       .catch((error) => {
         console.error('Error adding todo:', error);
         setIsLoading(false);
-        toast.error( 'catch',error);
+    toast.error('Error!! Plz Check Your Internet Connection(DB).. task:', error);
+
       });
   };
-  
+
   const handleDelete = (id) => {
     setTaskToDeleteId(id);
     setDeleteDialogOpen(true);
@@ -146,21 +137,9 @@ const CardBody = () => {
 
 
   };
-  // const dateObject = new Date();
 
   const handleUpdate = (task) => {
-
-//     const originalDate = new Date();
-// const year = originalDate.getFullYear();
-// const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
-// const day = originalDate.getDate().toString().padStart(2, '0');
-// const formattedDate = `${year}-${month}-${day}`;
-
-
-console.log(task.due_date);
-    
     setTaskToUpdate({
-  
       id: task.id,
       task: task.task,
       description: task.description,
@@ -169,30 +148,7 @@ console.log(task.due_date);
       created_at: task.created_at,
       due_date:task.due_date,
     });
-    // const dateString =taskToUpdate.due_date;
-    // const year1 = dateString.substr(0, 4)
-    // const month1 = dateString.substr(4, 2) - 1; // Months are zero-based
-    // const day1 = dateString.substr(6, 2);
-    
-    // const dateObject = new Date(year1, month1, day1);
-    console.log('ch',taskToUpdate.due_date);
-    setTaskDueDate(taskToUpdate.due_date);
     setUpdateDialogOpen(true);
-
-
-    const dateString = taskToUpdate.due_date;
-let dateObject = null;
-
-if (dateString && dateString.length === 8) {
-  const year = parseInt(dateString.substr(0, 4), 10);
-  const month = parseInt(dateString.substr(4, 2), 10) - 1; // Months are zero-based
-  const day = parseInt(dateString.substr(6, 2), 10);
-
-  if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
-    dateObject = new Date(year, month, day);
-  }
-}
-    console.log(dateObject);
   };
 
   const handleToggleComplete = (task) => {
@@ -321,6 +277,7 @@ if (dateString && dateString.length === 8) {
   </Button>
 </div>
 
+
 <div>
 <TextField 
   placeholder="   Enter task name..." 
@@ -363,7 +320,7 @@ if (dateString && dateString.length === 8) {
   title={task.task}
   style={{
     borderBottom: '2px solid #c1a4eb'
-
+    // borderBottom: '2px solid #E3E6F0'
   }}
 />
                 <CardContent sx={{ position: 'relative' }}>
@@ -470,35 +427,6 @@ if (dateString && dateString.length === 8) {
                 value={taskToUpdate.link}
                 onChange={(e) => setTaskToUpdate({ ...taskToUpdate, link: e.target.value })}
               />
-
-
-
-
-<div style={{marginTop:'15px',}}> 
-
-{/* <TextField
-                sx={{ mt: 1 }}
-                label="Link"
-                variant="outlined"
-                fullWidth
-                value={dateObject}
-                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, due_date: e.target.value })}
-              /> */}
-              {/* <DatePicker
-  selected={taskToUpdate.due_date}
-  onChange={(date) => setTaskDueDate(new Date(taskToUpdate.due_date))}
-  // dateFormat="MMMM d, yyyy h:mmaa"
-  style={{ marginTop: '13px' }}
-/> */}
-<input
-   type="date"
-   value={taskToUpdate.due_date}
-   selected={taskToUpdate.due_date}
-   onChange={(e) => setTaskToUpdate({ ...taskToUpdate, due_date: e.target.value })}
-/>
-
-
-</div>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleUpdateDialogClose} style={{ backgroundColor: '#9150F0', color: 'white' }}>
@@ -556,19 +484,17 @@ if (dateString && dateString.length === 8) {
                 fullWidth
                 value={newTodo.link}
                 onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
-                sx={{ mt: 1 }}
+                sx={{ mt: 2 }}
               />
   <div style={{marginTop:'15px',}}> 
-
-  <span className="corner-span">When to do:</span>
-  
-  <DatePicker
-    selected={startDate}
-    onChange={(date) => setStartDate(date)}
-    style={{ marginTop: '13px' }}
-  />
+  <span class="corner-span">When to do    :</span> 
+   <DatePicker
+      selected={startDate}
+      onChange={(date) => setStartDate(date)}
+      style={{marginTop:'13px',}}
+      
+    />
 </div>
-
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseAddDialog} color="primary">
