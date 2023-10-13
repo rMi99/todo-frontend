@@ -23,8 +23,8 @@ import {
   Checkbox,
 } from '@mui/material';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// import DatePicker from 'react-datepicker';
+// import 'react-datepicker/dist/react-datepicker.css';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -145,16 +145,11 @@ const CardBody = () => {
     setTaskToDeleteId(id);
     setDeleteDialogOpen(true);
     setSnackbarMessage("Deleted");
-
-
   };
-  
 
   const handleUpdate = (task) => {
-
-
-
 console.log(task.due_date);
+console.log(setStartDate(task.due_date));
     
     setTaskToUpdate({
   
@@ -525,26 +520,13 @@ if (dateString && dateString.length === 8) {
 
 <div style={{marginTop:'15px',}}> 
 
-{/* <TextField
-                sx={{ mt: 1 }}
-                label="Link"
-                variant="outlined"
-                fullWidth
-                value={dateObject}
-                onChange={(e) => setTaskToUpdate({ ...taskToUpdate, due_date: e.target.value })}
-              /> */}
-              {/* <DatePicker
-  selected={taskToUpdate.due_date}
-  onChange={(date) => setTaskDueDate(new Date(taskToUpdate.due_date))}
-  // dateFormat="MMMM d, yyyy h:mmaa"
-  style={{ marginTop: '13px' }}
-/> */}
 <input
    type="date"
    value={taskToUpdate.due_date}
    selected={Today}
    fullWidth
    onChange={(e) => setTaskToUpdate({ ...taskToUpdate, due_date: e.target.value })}
+   style={{  height:'40px', width:'100%', opacity:'0.4',}}
 />
 
 
@@ -580,6 +562,7 @@ if (dateString && dateString.length === 8) {
     // justifyContent: 'center',
   }}
 >
+
             <DialogTitle id="add-dialog-title"  >Add Todo</DialogTitle>
             <DialogContent>
             <TextField
@@ -600,9 +583,10 @@ if (dateString && dateString.length === 8) {
       }}
     />
     {newTodo.error && (
-      <Typography color="error">
-        We Require The Task Field.
-      </Typography>
+ <Typography color="error" sx={{ fontSize: '10px' }}>
+ We Require The Task Field.
+</Typography>
+
     )}
               <TextField
                 label="Description"
@@ -622,15 +606,27 @@ if (dateString && dateString.length === 8) {
                 onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
                 sx={{ mt: 1 }}
               />
-  <div style={{marginTop:'15px',}}> 
 
-  <span className="corner-span">When to do:</span>
+  <div style={{marginTop:'15px',height:'44px', width:'387px', opacity:'1',borderRadius:'5px',}}> 
+
+  <span className="corner-span"></span>
   
-  <DatePicker
+  {/* <DatePicker
+style={{marginRight:'100px',}}
     selected={startDate}
-    onChange={(date) => setStartDate(date)}
-    style={{ marginTop: '13px' }}
-  />
+    onChange={(date) => }
+  /> */}
+<input
+   type="date"
+   value={newTodo.due_date}
+   selected={Today}
+   fullWidth
+   onChange={(e) => setTaskToUpdate({ ...newTodo, due_date: e.target.value })}
+   style={{  height:'40px', width:'100%', opacity:'0.4',}}
+/>
+
+
+
 </div>
 
             </DialogContent>

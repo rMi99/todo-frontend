@@ -17,7 +17,6 @@ const Dashboard = () => {
     
     useEffect(() => {
         const token = localStorage.getItem('token');
-       
         axios
             .get('http://localhost:8000/api/user', {
                 headers: {
