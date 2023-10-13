@@ -22,6 +22,7 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@mui/material';
+import isURL from 'validator/lib/isURL';
 
 // import DatePicker from 'react-datepicker';
 // import 'react-datepicker/dist/react-datepicker.css';
@@ -100,45 +101,51 @@ const CardBody = () => {
     });
   };
   const handleAddTodo = () => {
+  
     if (newTodo.task.trim() === '') {
       setNewTodo({ ...newTodo, error: true });
       return;
     }
+
+
+    if (newTodo.link === "" || isURL(newTodo.link)) {
+      console.log(startDate);
+      const originalDate = new Date(startDate);
+      const year = originalDate.getFullYear();
+      const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); 
+      const day = originalDate.getDate().toString().padStart(2, '0');
+      const formattedDate = `${year}${month}${day}`;
     
-  console.log(startDate);
-  const originalDate = new Date(startDate);
-  const year = originalDate.getFullYear();
-  const month = (originalDate.getMonth() + 1).toString().padStart(2, '0'); 
-  const day = originalDate.getDate().toString().padStart(2, '0');
-  const formattedDate = `${year}${month}${day}`;
-
-  console.log(formattedDate);
-
-
-
-   newTodo.due_date = formattedDate;
-    axios
-      .post('http://localhost:8000/api/create', newTodo)
-      .then(() => {
+      console.log(formattedDate);
+    
+       newTodo.due_date = formattedDate;
         axios
-          .get(`http://localhost:8000/api/task/${userId}`)
-          .then((response) => {
-            setTasks(response.data);
-            setIsLoading(false);
-            toast("Successfully Added..!!");
+          .post('http://localhost:8000/api/create', newTodo)
+          .then(() => {
+            axios
+              .get(`http://localhost:8000/api/task/${userId}`)
+              .then((response) => {
+                setTasks(response.data);
+                setIsLoading(false);
+                toast("Successfully Added..!!");
+              })
+              .catch((error) => {
+                console.error('Error fetching updated data:', error);
+                setIsLoading(false);
+                toast.error('Error!!', error);
+              });
+            handleCloseAddDialog();
           })
           .catch((error) => {
-            console.error('Error fetching updated data:', error);
+            console.error('Error adding todo:', error);
             setIsLoading(false);
-            toast.error('Error!!', error);
+            toast.error( 'catch',error);
           });
-        handleCloseAddDialog();
-      })
-      .catch((error) => {
-        console.error('Error adding todo:', error);
-        setIsLoading(false);
-        toast.error( 'catch',error);
-      });
+
+    } else {
+      setLinkError(true);
+      return;
+    }
   };
   
   const handleDelete = (id) => {
@@ -160,12 +167,7 @@ console.log(setStartDate(task.due_date));
       is_completed: task.is_completed,
       due_date:task.due_date,
     });
-    // const dateString =taskToUpdate.due_date;
-    // const year1 = dateString.substr(0, 4)
-    // const month1 = dateString.substr(4, 2) - 1; // Months are zero-based
-    // const day1 = dateString.substr(6, 2);
-    
-    // const dateObject = new Date(year1, month1, day1);
+
     console.log('ch',taskDueDate);
     setTaskDueDate(taskToUpdate.due_date);
     setUpdateDialogOpen(true);
@@ -277,6 +279,9 @@ if (dateString && dateString.length === 8) {
     setTaskDueDate(null); 
     handleSearch();
   };
+  const [linkError, setLinkError] = useState(false);
+
+ 
   
 
   const handleSearch = () => {
@@ -557,10 +562,7 @@ if (dateString && dateString.length === 8) {
     maxHeight: '500px',
     left:'35%' ,
     top:'23%', 
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-  }}
+   }}
 >
 
             <DialogTitle id="add-dialog-title"  >Add Todo</DialogTitle>
@@ -584,7 +586,7 @@ if (dateString && dateString.length === 8) {
     />
     {newTodo.error && (
  <Typography color="error" sx={{ fontSize: '10px' }}>
- We Require The Task Field.
+ We require the task field.
 </Typography>
 
     )}
@@ -598,24 +600,28 @@ if (dateString && dateString.length === 8) {
                 }
                 sx={{ mt: 1 }}
               />
-              <TextField
-                label="Link"
-                variant="outlined"
-                fullWidth
-                value={newTodo.link}
-                onChange={(e) => setNewTodo({ ...newTodo, link: e.target.value })}
-                sx={{ mt: 1 }}
-              />
+               <TextField
+        label="Link"
+        variant="outlined"
+        fullWidth
+        value={newTodo.link}
+        onChange={(e) => {
+          setNewTodo({ ...newTodo, link: e.target.value });
+          setLinkError(false); 
+        }}
+        sx={{ mt: 1 }}
+        error={linkError}
+      />
+      {linkError && (
+        <Typography color="error" sx={{ fontSize: '10px' }}>
+          Enter a valid link (URL).
+        </Typography>
+      )}
 
   <div style={{marginTop:'15px',height:'44px', width:'387px', opacity:'1',borderRadius:'5px',}}> 
 
   <span className="corner-span"></span>
-  
-  {/* <DatePicker
-style={{marginRight:'100px',}}
-    selected={startDate}
-    onChange={(date) => }
-  /> */}
+
 <input
    type="date"
    value={newTodo.due_date}
