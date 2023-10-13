@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import './CardBody.css';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import {
   Grid,
   Card,
@@ -147,15 +148,10 @@ const CardBody = () => {
 
 
   };
-  // const dateObject = new Date();
+  
 
   const handleUpdate = (task) => {
 
-//     const originalDate = new Date();
-// const year = originalDate.getFullYear();
-// const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
-// const day = originalDate.getDate().toString().padStart(2, '0');
-// const formattedDate = `${year}-${month}-${day}`;
 
 
 console.log(task.due_date);
@@ -281,11 +277,9 @@ if (dateString && dateString.length === 8) {
   // };
 
   const handleFilterReset = () => {
-    setSearchId(''); // Reset the search text
-    setShowCompletedTasks(false); // Reset the show completed tasks filter
-    setTaskDueDate(null); // Reset the due date filter
-  
-    // Reapply the filters
+    setSearchId(''); 
+    setShowCompletedTasks(false); 
+    setTaskDueDate(null); 
     handleSearch();
   };
   
@@ -314,24 +308,6 @@ if (dateString && dateString.length === 8) {
         <div>
 
 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-{/* 
-<FormControlLabel
-  control={
-    <Switch
-      checked={showCompletedTasks}
-      onChange={() => setShowCompletedTasks(showCompletedTasks)}
-      name="showCompletedTasks"
-      color="primary"
-    />
-    
-  }
-  label="Show Completed"
-  sx={{
-    marginTop: 2,
-    marginLeft: '10px',
-  }}
-/> */}
-
 <FormControlLabel
   control={
     <Switch
@@ -347,6 +323,27 @@ if (dateString && dateString.length === 8) {
     marginLeft: '10px',
   }}
 />
+<Button
+  variant="contained"
+  sx={{
+    mt: 1,
+  }}
+  style={{ backgroundColor: '#C1A4EB', color: '#ffffff', marginRight: '10px' }}
+  startIcon={<CalendarTodayIcon />} // Add the calendar icon here
+>
+  <input
+    type="date"
+    value={taskDueDate}
+    onChange={(e) => setTaskDueDate(e.target.value)}
+    style={{ backgroundColor: '#C1A4EB', color: '#ffffff', border: 'none', marginRight: '10px' }}
+  />
+</Button>
+
+
+
+
+
+
 
 <Button
   variant="contained"
@@ -354,23 +351,6 @@ if (dateString && dateString.length === 8) {
     mt: 1,
   }}
   style={{ backgroundColor: '#C1A4EB', color: '#ffffff', marginRight: '10px' }}
-  startIcon={<AddIcon />}
->
-<input
-  type="date"
-  value={taskDueDate}
-  onChange={(e) => setTaskDueDate(e.target.value)}
-  style={{ backgroundColor: '#C1A4EB', color: '#ffffff', border: 'none', marginRight: '10px' }}
-/>
-
-</Button>
-
-<Button
-  variant="contained"
-  sx={{
-    mt: 1,
-  }}
-  style={{ backgroundColor: '#FF0000', color: '#ffffff', marginRight: '10px' }}
   onClick={handleFilterReset}
 >
   Reset Filters
@@ -405,7 +385,7 @@ if (dateString && dateString.length === 8) {
       top: '-115px',
       width: '23%',
       left: '64.5%',
-      borderRadius: '10px',
+      borderRadius: '5px',
     },
   }}
   InputLabelProps={{
@@ -580,12 +560,26 @@ if (dateString && dateString.length === 8) {
             </DialogActions>
           </Dialog>
 
+          <div style={{justifyContent:'center',}}>
+
+
           <Dialog
-            open={addDialogOpen}
-            onClose={handleCloseAddDialog}
-            aria-labelledby="add-dialog-title"
-            aria-describedby="add-dialog-description"
-          >
+  open={addDialogOpen}
+  onClose={handleCloseAddDialog}
+  aria-labelledby="add-dialog-title"
+  aria-describedby="add-dialog-description"
+  sx={{
+    minWidth: '500px', 
+    minHeight: '500px', 
+    maxWidth: '500px', 
+    maxHeight: '500px',
+    left:'35%' ,
+    top:'23%', 
+    // display: 'flex',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  }}
+>
             <DialogTitle id="add-dialog-title"  >Add Todo</DialogTitle>
             <DialogContent>
             <TextField
@@ -649,6 +643,8 @@ if (dateString && dateString.length === 8) {
               </Button>
             </DialogActions>
           </Dialog>
+
+          </div>
           <Snackbar
             open={snackbarOpen}
             autoHideDuration={3000}
