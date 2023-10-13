@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // Import the styles
+import 'react-datepicker/dist/react-datepicker.css';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -32,6 +32,7 @@ import Switch from '@mui/material/Switch';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './CardBody.css'
+import { Today } from '@mui/icons-material';
 
 const CardBody = () => {
 
@@ -53,7 +54,7 @@ const CardBody = () => {
     description: '',
     link: '',
     is_completed: false,
-    created_at: '',
+  
     due_date: null,
   });
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -166,7 +167,6 @@ console.log(task.due_date);
       description: task.description,
       link: task.link,
       is_completed: task.is_completed,
-      created_at: task.created_at,
       due_date:task.due_date,
     });
     // const dateString =taskToUpdate.due_date;
@@ -175,7 +175,7 @@ console.log(task.due_date);
     // const day1 = dateString.substr(6, 2);
     
     // const dateObject = new Date(year1, month1, day1);
-    console.log('ch',taskToUpdate.due_date);
+    console.log('ch',taskDueDate);
     setTaskDueDate(taskToUpdate.due_date);
     setUpdateDialogOpen(true);
 
@@ -185,7 +185,7 @@ let dateObject = null;
 
 if (dateString && dateString.length === 8) {
   const year = parseInt(dateString.substr(0, 4), 10);
-  const month = parseInt(dateString.substr(4, 2), 10) - 1; // Months are zero-based
+  const month = parseInt(dateString.substr(4, 2), 10) - 1; 
   const day = parseInt(dateString.substr(6, 2), 10);
 
   if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
@@ -270,15 +270,37 @@ if (dateString && dateString.length === 8) {
   };
 
 
+  // const handleSearch = () => {
+  //   const filtered = tasks.filter((task) =>
+  //     task.task.toLowerCase().includes(searchId.toLowerCase()) &&
+  //     (!showCompletedTasks || !task.is_completed)
+  //   );
+  
+  //   setFilteredTasks(filtered);
+  //   setIsLoading(false);
+  // };
+
+  const handleFilterReset = () => {
+    setSearchId(''); // Reset the search text
+    setShowCompletedTasks(false); // Reset the show completed tasks filter
+    setTaskDueDate(null); // Reset the due date filter
+  
+    // Reapply the filters
+    handleSearch();
+  };
+  
+
   const handleSearch = () => {
     const filtered = tasks.filter((task) =>
       task.task.toLowerCase().includes(searchId.toLowerCase()) &&
-      (showCompletedTasks ? task.is_completed : true)
+      (!showCompletedTasks || !task.is_completed) &&
+      (!taskDueDate || task.due_date === taskDueDate)
     );
   
     setFilteredTasks(filtered);
     setIsLoading(false);
   };
+  
   
   useEffect(() => {
     handleSearch();
@@ -292,7 +314,7 @@ if (dateString && dateString.length === 8) {
         <div>
 
 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-
+{/* 
 <FormControlLabel
   control={
     <Switch
@@ -301,13 +323,60 @@ if (dateString && dateString.length === 8) {
       name="showCompletedTasks"
       color="primary"
     />
+    
   }
   label="Show Completed"
   sx={{
     marginTop: 2,
     marginLeft: '10px',
   }}
+/> */}
+
+<FormControlLabel
+  control={
+    <Switch
+      checked={showCompletedTasks}
+      onChange={() => setShowCompletedTasks(!showCompletedTasks)} // Toggle the state
+      name="showCompletedTasks"
+      color="primary"
+    />
+  }
+  label="Show Uncompleted"
+  sx={{
+    marginTop: 2,
+    marginLeft: '10px',
+  }}
 />
+
+<Button
+  variant="contained"
+  sx={{
+    mt: 1,
+  }}
+  style={{ backgroundColor: '#C1A4EB', color: '#ffffff', marginRight: '10px' }}
+  startIcon={<AddIcon />}
+>
+<input
+  type="date"
+  value={taskDueDate}
+  onChange={(e) => setTaskDueDate(e.target.value)}
+  style={{ backgroundColor: '#C1A4EB', color: '#ffffff', border: 'none', marginRight: '10px' }}
+/>
+
+</Button>
+
+<Button
+  variant="contained"
+  sx={{
+    mt: 1,
+  }}
+  style={{ backgroundColor: '#FF0000', color: '#ffffff', marginRight: '10px' }}
+  onClick={handleFilterReset}
+>
+  Reset Filters
+</Button>
+
+
   <Button
     variant="contained"
     sx={{
@@ -397,7 +466,7 @@ if (dateString && dateString.length === 8) {
                     </a>
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ position: 'absolute', top: '97px' }}>
-                    {task.created_at}
+                    {task.due_date}
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
@@ -493,7 +562,8 @@ if (dateString && dateString.length === 8) {
 <input
    type="date"
    value={taskToUpdate.due_date}
-   selected={taskToUpdate.due_date}
+   selected={Today}
+   fullWidth
    onChange={(e) => setTaskToUpdate({ ...taskToUpdate, due_date: e.target.value })}
 />
 
