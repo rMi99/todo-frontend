@@ -407,15 +407,15 @@ if (dateString && dateString.length === 8) {
         <Grid container spacing={2} sx={{ mt: 1 }} style={{ justifyContent: 'center'}}>
           {filteredTasks.map((task) => (
             <Grid item xs={8} md={4} lg={2} key={task.id}>
-              <Card style={{ minHeight:'106%',marginBottom:'10px', }}>
+              <Card style={{ minHeight:'98%',marginBottom:'10px', }}>
               <CardHeader 
   title={task.task}
   style={{
-    borderBottom: '2px solid #c1a4eb'
+    borderBottom: '2px solid #c1a4eb', fontFamily:'ui-serif',
 
   }}
 />
-                <CardContent sx={{ position: 'relative' }}>
+                <CardContent sx={{ position: 'relative', }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <FormControlLabel
                       control={
