@@ -9,10 +9,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MoreIcon from '@mui/icons-material/MoreVert';
-
-
+import { Link } from 'react-router-dom';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -40,6 +38,10 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+  const linkStyle = {
+    textDecoration: 'none', // Remove underline
+    color: 'inherit', // Use the inherit color (usually black)
+};
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -62,7 +64,9 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>You Login as : {userName}</MenuItem>
+      <Link to='/profile' style={linkStyle} >
+      <MenuItem >You Login as : {userName}</MenuItem>
+      </Link>
       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
     </Menu>
   );
@@ -85,30 +89,11 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
      
-     <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <ExitToAppIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+     <Link to="/profile">
+     <MenuItem >You Login as : {userName}</MenuItem>
+     </Link>
+      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+   
     </Menu>
   );
   return (
@@ -129,9 +114,9 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' ,fontFamily:'system-ui', } }}
           >
-           Todo Application
+           Well-Timed
           </Typography>
         
           <Box sx={{ flexGrow: 1 }} />

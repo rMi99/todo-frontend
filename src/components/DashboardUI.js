@@ -1,8 +1,8 @@
 import React, { useEffect  } from 'react';
 import axios from 'axios';
 import NavComponent from './NavComponent';
-import TaskTable from './CardBody';
-// import TaskTable from './TaskTable';
+import CardBody from './CardBody';
+// import TaskTable from './1';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
@@ -27,7 +27,6 @@ const Dashboard = () => {
     
     useEffect(() => {
         const token = localStorage.getItem('token');
-       
         axios
             .get('http://localhost:8000/api/user', {
                 headers: {
@@ -55,8 +54,10 @@ const Dashboard = () => {
             <NavComponent />
         
          <div>
-         <TaskTable />
+         {/* <TaskTable /> */}
          
+         <CardBody />
+
        </div> </div>
        </CssBaseline>
        </ThemeProvider>
