@@ -24,8 +24,7 @@ import {
 } from "@mui/material";
 import isURL from "validator/lib/isURL";
 
-// import DatePicker from 'react-datepicker';
-// import 'react-datepicker/dist/react-datepicker.css';
+
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -150,6 +149,7 @@ const CardBody = () => {
   };
 
   const handleUpdate = (task) => {
+    
     console.log(task.due_date);
     console.log(setStartDate(task.due_date));
 

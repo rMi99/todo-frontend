@@ -15,10 +15,12 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NavComponent from './NavComponent';
 
 const ProfilePage = () => {
   return (
     <div>
+      <NavComponent/>
       <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '0 auto' }}>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item>
