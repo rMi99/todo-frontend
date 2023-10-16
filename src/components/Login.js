@@ -10,10 +10,15 @@ const Login = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+<<<<<<< HEAD
 
   const backgroundStyle = {
     backgroundColor: '#e3e6f0',
   };
+=======
+ 
+
+>>>>>>> b2ffa93cbc59aea89b3e81700c9035b20fe3f9c5
 
   const handleLogin = async () => {
     // Reset error messages
@@ -68,14 +73,20 @@ const Login = () => {
   };
 
   return (
-    <div style={backgroundStyle}>
+    <div>
       {isLoading ? (
         <Spinner />
       ) : (
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh', opacity: '0.8' }}>
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
+<<<<<<< HEAD
               <LockOutlinedIcon />
+=======
+              <Avatar style={{ margin: 'auto' }}>
+                <LockOutlinedIcon />
+              </Avatar>
+>>>>>>> b2ffa93cbc59aea89b3e81700c9035b20fe3f9c5
               <Typography variant="h5" style={{ marginTop: '10px' }}>
                 Login
               </Typography>

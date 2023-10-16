@@ -29,10 +29,7 @@ export default function PrimarySearchAppBar() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('user_id');
-  
-
     window.location.href = '/login';
-    // return <redirect to="/login" />;
 };
 
   const handleMobileMenuClose = () => {
@@ -114,7 +111,6 @@ export default function PrimarySearchAppBar() {
       </MenuItem>
     </Menu>
   );
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ backgroundColor: 'white',color: '#9150F0'}}>
@@ -141,7 +137,6 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             
-    
             <IconButton
               size="large"
               edge="end"
@@ -173,7 +168,6 @@ export default function PrimarySearchAppBar() {
     </Box>
     
   );
-  
 }
 
 

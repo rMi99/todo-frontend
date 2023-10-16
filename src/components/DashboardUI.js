@@ -8,7 +8,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 
 const Dashboard = () => {
+<<<<<<< HEAD
  
+=======
+    // const backgroundStyle = {
+    //     background: `url('/images/bgmain.jpg')`, 
+    //     backgroundSize: 'cover',
+    //     backgroundRepeat: 'no-repeat',
+    //     backgroundPosition: 'center center',
+    //     minHeight: '100vh', 
+    //   };
+>>>>>>> b2ffa93cbc59aea89b3e81700c9035b20fe3f9c5
       const contentContainerStyle = {
         backgroundColor: '#e3e6f0', 
         padding: '20px',
@@ -34,9 +44,14 @@ const Dashboard = () => {
     }, []);
 
     return (
+<<<<<<< HEAD
         <ThemeProvider theme={theme}>
             <CssBaseline>
         <div style={contentContainerStyle}>
+=======
+        
+        <div>
+>>>>>>> b2ffa93cbc59aea89b3e81700c9035b20fe3f9c5
             <NavComponent />
         
          <div>
