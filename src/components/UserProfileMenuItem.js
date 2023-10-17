@@ -19,7 +19,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from 'axios';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 function ProfilePage({ userName }) {
   const [open, setOpen] = useState(false);
@@ -28,6 +28,7 @@ function ProfilePage({ userName }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const userId = localStorage.getItem('user_id');
 
   const handleOpen = () => {
@@ -43,13 +44,21 @@ function ProfilePage({ userName }) {
     if (!newEmail.match(emailPattern)) {
       setEmailError('Invalid email address');
     } else {
-      setEmailError(''); 
+      setEmailError('');
+    }
+  };
+
+  const handlePasswordBlur = () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords don't match");
+    } else {
+      setPasswordError('');
     }
   };
 
   const handleSaveChanges = () => {
     if (newPassword !== confirmPassword) {
-      alert("New password and confirm password don't match.");
+      setPasswordError("Passwords don't match");
       return;
     }
 
@@ -64,16 +73,11 @@ function ProfilePage({ userName }) {
       .then((response) => {
         localStorage.setItem('user', newName);
         console.log(response.data);
-
-       
         toast.success('Profile updated successfully', { autoClose: 2000 });
-
         handleClose();
       })
       .catch((error) => {
         console.error(error);
-
-      
         toast.error('Failed to update profile');
       });
   };
@@ -139,7 +143,14 @@ function ProfilePage({ userName }) {
                   }
                 />
               </ListItem>
-              <Divider />
+
+            </List>
+          </Paper>
+
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
+
+
+          <Divider />
               <ListItem>
                 <ListItemText
                   primary="Old Password"
@@ -165,11 +176,13 @@ function ProfilePage({ userName }) {
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
+                      onBlur={handlePasswordBlur}
+                      error={passwordError.length > 0}
+                      helperText={passwordError}
                     />
                   }
                 />
               </ListItem>
-            </List>
           </Paper>
         </DialogContent>
         <DialogActions>
