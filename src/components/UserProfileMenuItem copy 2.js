@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Avatar,
   Typography,
@@ -19,7 +19,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from 'axios';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 
 function ProfilePage({ userName }) {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,25 @@ function ProfilePage({ userName }) {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const userId = localStorage.getItem('user_id');
+
+  useEffect(() => {
+    fetchUserDetails();
+  },);
+
+  const fetchUserDetails = () => {
+    axios
+      .get(`http://localhost:8000/api/user/${userId}`)
+      .then((response) => {
+        const userData = response.data;
+        setNewName(userData.name);
+        setNewEmail(userData.email);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -43,13 +61,26 @@ function ProfilePage({ userName }) {
     if (!newEmail.match(emailPattern)) {
       setEmailError('Invalid email address');
     } else {
-      setEmailError(''); 
+      setEmailError('');
+    }
+  };
+
+  const handlePasswordBlur = () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordError("Passwords don't match");
+    } else {
+      setPasswordError('');
     }
   };
 
   const handleSaveChanges = () => {
     if (newPassword !== confirmPassword) {
-      alert("New password and confirm password don't match.");
+      setPasswordError("Passwords don't match");
+      return;
+    }
+
+    if (emailError) {
+      toast.error('Please provide a valid email address.');
       return;
     }
 
@@ -65,15 +96,15 @@ function ProfilePage({ userName }) {
         localStorage.setItem('user', newName);
         console.log(response.data);
 
-       
         toast.success('Profile updated successfully', { autoClose: 2000 });
+
+        userData[newPassword] = null;
 
         handleClose();
       })
       .catch((error) => {
         console.error(error);
 
-      
         toast.error('Failed to update profile');
       });
   };
@@ -99,13 +130,13 @@ function ProfilePage({ userName }) {
                 </Avatar>
               </Grid>
               <Grid item>
-                <Typography variant="h5">User Details</Typography>
+                <Typography variant="h5">User's Name</Typography>
                 <TextField
                   variant="standard"
                   fullWidth
                   margin="normal"
                   value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
+                  onChange={(e) => setNewName(e.target.value)} 
                 />
               </Grid>
               <Grid item>
@@ -117,10 +148,9 @@ function ProfilePage({ userName }) {
           </Paper>
 
           <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
-            <Typography variant="h6">User Details</Typography>
             <List>
               <ListItem>
-                <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName} />} />
+                <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName}  onChange={(e) => setNewName(e.target.value)}  />} />
               </ListItem>
               <Divider />
               <ListItem>
@@ -131,7 +161,7 @@ function ProfilePage({ userName }) {
                       variant="standard"
                       fullWidth
                       value={newEmail}
-                      onChange={(e) => setNewEmail(e.target.value)}
+                      onChange={(e) => setNewEmail(e.target.value)} 
                       onBlur={handleEmailBlur}
                       error={emailError.length > 0}
                       helperText={emailError}
@@ -139,22 +169,11 @@ function ProfilePage({ userName }) {
                   }
                 />
               </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemText
-                  primary="Old Password"
-                  secondary={
-                    <TextField
-                      variant="standard"
-                      fullWidth
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                    />
-                  }
-                />
-              </ListItem>
-              <Divider />
+            </List>
+          </Paper>
+
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
+            <List>
               <ListItem>
                 <ListItemText
                   primary="New Password"
@@ -163,8 +182,29 @@ function ProfilePage({ userName }) {
                       variant="standard"
                       fullWidth
                       type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)} 
+                      onBlur={handlePasswordBlur}
+                      error={passwordError.length > 0}
+                      helperText={passwordError}
+                    />
+                  }
+                />
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListItemText
+                  primary="Confirm Password"
+                  secondary={
+                    <TextField
+                      variant="standard"
+                      fullWidth
+                      type="password"
                       value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                      onBlur={handlePasswordBlur}
+                      error={passwordError.length > 0}
+                      helperText={passwordError}
                     />
                   }
                 />
