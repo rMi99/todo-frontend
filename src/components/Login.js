@@ -3,8 +3,12 @@ import { Grid, Paper, Typography, TextField, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Spinner from './Spinner';
 import axios from 'axios';
+import IconButton from '@mui/material/IconButton';
+import GoogleIcon from '@mui/icons-material/Google';
+// import { useHistory } from 'react-router-dom';
 
 const Login = () => {
+  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -14,9 +18,18 @@ const Login = () => {
   const backgroundStyle = {
     backgroundColor: '#e3e6f0',
   };
+<<<<<<< HEAD
  
 
+=======
+  const handleLoginWithGoogle = async () => {
+>>>>>>> do9
 
+    window.location.href = 'http://localhost:8000/api/auth/google/callback';
+    }
+
+
+  
   const handleLogin = async () => {
     // Reset error messages
     setEmailError('');
@@ -115,6 +128,24 @@ const Login = () => {
               >
                 Login
               </Button>
+
+
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={handleLoginWithGoogle}
+                style={{
+                  margin: '5px 0',
+                  backgroundColor: '#9150F0',
+                }}
+              >
+                <IconButton style={{ marginRight: '8px' }} color="inherit">
+                  <GoogleIcon />
+                </IconButton>
+                Login with Google
+              </Button>
+
               <Button
                 variant="contained"
                 color="primary"

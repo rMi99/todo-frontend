@@ -10,7 +10,8 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import UserProfileMenu from './UserProfileMenuItem';
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,8 +40,8 @@ export default function PrimarySearchAppBar() {
     handleMobileMenuClose();
   };
   const linkStyle = {
-    textDecoration: 'none', // Remove underline
-    color: 'inherit', // Use the inherit color (usually black)
+    textDecoration: 'none', 
+    color: 'inherit',
 };
 
   const handleMobileMenuOpen = (event) => {
@@ -64,9 +65,11 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <Link to='/profile' style={linkStyle} >
-      <MenuItem >You Login as : {userName}</MenuItem>
-      </Link>
+      {/* <Link to='/profile' style={linkStyle} >
+       */}
+       <MenuItem ><UserProfileMenu style={linkStyle} userName={userName}/></MenuItem>
+      {/* <MenuItem >You Login as : {userName}</MenuItem> */}
+      {/* </Link> */}
       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
     </Menu>
   );
@@ -89,9 +92,11 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
      
-     <Link to="/profile">
-     <MenuItem >You Login as : {userName}</MenuItem>
-     </Link>
+     {/* <Link to="/profile"> */}
+     {/* <MenuItem >You Login as : {userName}</MenuItem> */}
+     <MenuItem><UserProfileMenu userName={userName}/></MenuItem>
+     
+     {/* </Link> */}
       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
    
     </Menu>
