@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login'; 
 import Register from './components/Register'; 
 import Dashboard from './components/DashboardUI'; 
-import UserProfile from './components/UserProfile'; 
+// import UserProfile from './components/UserProfile'; 
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,7 +23,7 @@ const App = () => {
                 <Route exact path="/login" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} />
                 <Route path="/register" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Register />} />
                 <Route exact path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
-                <Route exact path="/profile" element={isLoggedIn ? <UserProfile /> : <Navigate to="/login" />} />
+                {/* <Route exact path="/profile" element={isLoggedIn ? <UserProfile /> : <Navigate to="/login" />} /> */}
                 <Route path="/*" element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
