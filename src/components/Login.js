@@ -131,56 +131,51 @@ const Login = () => {
                 error={!!passwordError}
                 helperText={passwordError}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleLogin}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                Login
-              </Button>
+        <Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleLogin}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  Login
+</Button>
 
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleLoginWithGoogle}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                <IconButton style={{ marginRight: '8px' }} color="inherit">
-                  <GoogleIcon />
-                </IconButton>
-                Login with Google
-              </Button>
-              {/* <GoogleLogin
-                clientId="326007732083-ochcouqhgmsvugsgul61cs9407ajkaut.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={handleLoginWithGoogle}
-                onFailure={(error) => console.log(error)}
-              /> */}
+<Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleLoginWithGoogle}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  <IconButton color="inherit">
+    <GoogleIcon />
+  </IconButton>
+  Login with Google
+</Button>
 
+<Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleRegisterClick}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  Register
+</Button>
 
-
-
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleRegisterClick}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                Register
-              </Button>
             </Paper>
           </Grid>
         </Grid>
