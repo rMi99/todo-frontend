@@ -35,7 +35,7 @@ function ProfilePage({ userName }) { // Use the function keyword instead of an a
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open Profile Modal</Button>
+      <Button style={linkStyle} onClick={handleOpen}>Open Profile Modal</Button>
       <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle>User Profile</DialogTitle>
         <DialogContent>

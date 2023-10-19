@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Avatar,
+
   Typography,
   Paper,
   Grid,
-  IconButton,
+
   List,
   ListItem,
   ListItemText,
@@ -16,8 +16,7 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import axios from 'axios';
 import { toast } from 'react-toastify'; 
 
@@ -88,39 +87,33 @@ function ProfilePage({ userName }) {
       <Button style={linkStyle} onClick={handleOpen}>
         {userName}
       </Button>
+     
       <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle>User Profile</DialogTitle>
-        <DialogContent>
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '0 auto' }}>
+        <DialogContent style={{ display: 'flex', flexDirection: 'row', maxWidth: '100%' }}>
+        
+  <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '0 auto', marginBottom: '20px' }}>
+      
             <Grid container spacing={2} justifyContent="center" alignItems="center">
+              
+              {/* <Grid item>
+        
+             
+              </Grid> */}
               <Grid item>
-                <Avatar style={{ width: '100px', height: '100px' }}>
-                  <AccountCircleIcon style={{ width: '100%', height: '100%' }} />
-                </Avatar>
-              </Grid>
-              <Grid item>
-                <Typography variant="h5">User Details</Typography>
-                <TextField
+                <Typography variant="h6">User Details</Typography>
+                {/* <TextField
                   variant="standard"
                   fullWidth
                   margin="normal"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <IconButton>
-                  <EditIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
-            <Typography variant="h6">User Details</Typography>
-            <List>
+                /> */}
+<List>
+                <Divider />
+                
               <ListItem>
-                <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName} />} />
+                <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName}    onChange={(e) => setNewName(e.target.value)} />} />
               </ListItem>
               <Divider />
               <ListItem>
@@ -139,6 +132,16 @@ function ProfilePage({ userName }) {
                   }
                 />
               </ListItem>
+              </List>
+
+              </Grid>
+           
+            </Grid>
+          </Paper>
+
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '700px', margin: '0 auto', marginBottom: '20px' }}>
+            <Typography variant="h6">Password Details</Typography>
+            <List>
               <Divider />
               <ListItem>
                 <ListItemText
