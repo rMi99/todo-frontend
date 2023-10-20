@@ -6,17 +6,28 @@
     color: #9150F0; 
   }
 
-  .srchBox{
-
-    border-bottom: '3px solid #9150F0';
+  .searchBox{
+display: none;
+    /* border-bottom: '3px solid #9150F0';
     justify-content: 'center';
     top: '-115px';
     width: '23%';
     left: '64.5%';
-    border-radius: '10px';
+    border-radius: '10px'; */
+    /* InputProps={{
+      style: {
+        borderBottom: "3px solid #9150F0",
+        justifyContent: "center",
+        top: "-115px",
+        width: "23%",
+        left: "64.5%",
+        borderRadius: "5px",
+      },
+    }} */
   }
 
-  @media screen and (max-width: 412) {
+  
+  @media screen and (max-width: 912) {
     .table-container {
       overflow-x: scroll;
 
@@ -29,10 +40,10 @@
       height: 69%;
       top: 59%;
     }
-    .srchBox{
+    .searchBox{
     border-bottom: 3px solid rgb(145, 80, 240);
     justify-content: center;
-    top: -119px;
+    top: -130px;
     width: 71%;
     left: 14.5%;
     border-radius: 4px;

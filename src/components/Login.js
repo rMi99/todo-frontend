@@ -106,8 +106,8 @@ const Login = () => {
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
               <LockOutlinedIcon />
-              <Typography variant="h5" style={{ marginTop: '10px' }}>
-                Login
+              <Typography variant="h5" style={{ marginTop: '10px',fontFamily: 'system-ui' ,fontWeight: '1000'}}>
+              Well-Timed
               </Typography>
               <TextField
                 label="Email"

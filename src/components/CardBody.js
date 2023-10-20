@@ -105,15 +105,6 @@ const CardBody = () => {
 
     if (newTodo.link === "" || isURL(newTodo.link)) {
       console.log(startDate);
-      // const originalDate = new Date(startDate);
-      // const year = originalDate.getFullYear();
-      // const month = (originalDate.getMonth() + 1).toString().padStart(2, "0");
-      // const day = originalDate.getDate().toString().padStart(2, "0");
-      // const formattedDate = `${year}${month}${day}`;
-
-      // console.log(formattedDate);
-
-      // newTodo.due_date = formattedDate;
       axios
         .post("http://localhost:8000/api/create", newTodo)
         .then(() => {
@@ -134,7 +125,7 @@ const CardBody = () => {
         .catch((error) => {
           console.error("Error adding todo:", error);
           setIsLoading(false);
-          toast.error("catch", error);
+          // toast.error("catch", error);
         });
     } else {
       setLinkError(true);
@@ -269,17 +260,7 @@ const CardBody = () => {
     setTaskDueDate(null);
     handleSearch();
   };
- 
 
-  // const handleSearch = () => {
-  //   const filtered = tasks.filter((task) =>
-  //     task.task.toLowerCase().includes(searchId.toLowerCase()) &&
-  //     (!showCompletedTasks || !task.is_completed)
-  //   );
-
-  //   setFilteredTasks(filtered);
-  //   setIsLoading(false);
-  // };
   const handleSearch = () => {
     const filtered = tasks.filter(
       (task) =>
@@ -377,18 +358,9 @@ const CardBody = () => {
               variant="standard"
               fullWidth
               value={searchId}
-              className="srchBox"
+              className="searchBox"
               onChange={(e) => setSearchId(e.target.value)}
-              InputProps={{
-                style: {
-                  borderBottom: "3px solid #9150F0",
-                  justifyContent: "center",
-                  top: "-115px",
-                  width: "23%",
-                  left: "64.5%",
-                  borderRadius: "5px",
-                },
-              }}
+     
               InputLabelProps={{
                 shrink: true,
               }}

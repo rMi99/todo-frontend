@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './UserProfileMenuItemStyle.css';
+
 import {
   Avatar,
   Typography,
@@ -82,6 +84,18 @@ function ProfilePage({ userName }) {
       });
   };
 
+  axios
+  .get(`http://localhost:8000/api/user/${userId}`)
+  .then((response) =>{
+  // setNewName();
+  setNewEmail(response.data.email);
+}).catch((error) => {
+
+  console.error(error);
+  toast.error('Warning The ');
+
+});
+
   const linkStyle = {
     textDecoration: 'none',
     color: 'inherit',
@@ -95,7 +109,7 @@ function ProfilePage({ userName }) {
       <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle>User Profile</DialogTitle>
         <DialogContent>
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '0 auto' }}>
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '900px', margin: '0 auto' }}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
               <Grid item>
                 <Avatar style={{ width: '100px', height: '100px' }}>
@@ -120,8 +134,13 @@ function ProfilePage({ userName }) {
             </Grid>
           </Paper>
 
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
+
+          <div className='flex-container'>
+
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto',}}>
             <Typography variant="h6">User Details</Typography>
+            
+          <Divider />
             <List>
               <ListItem>
                 <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName} />} />
@@ -147,13 +166,15 @@ function ProfilePage({ userName }) {
             </List>
           </Paper>
 
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto', }}>
 
+          <Typography variant="h6">Password Change</Typography>
 
           <Divider />
+
               <ListItem>
                 <ListItemText
-                  primary="Old Password"
+                  primary="New Password"
                   secondary={
                     <TextField
                       variant="standard"
@@ -184,6 +205,9 @@ function ProfilePage({ userName }) {
                 />
               </ListItem>
           </Paper>
+
+</div>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

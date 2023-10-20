@@ -35,15 +35,11 @@ const Dashboard = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline>
-        <div style={contentContainerStyle}>
-            <NavComponent />
-        
-         <div>
-         {/* <TaskTable /> */}
-         
-         <CardBody />
+            <div style={contentContainerStyle}>
+            <NavComponent />  
+             <CardBody />
 
-       </div> </div>
+            </div>
        </CssBaseline>
        </ThemeProvider>
     );
