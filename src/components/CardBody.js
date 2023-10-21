@@ -140,7 +140,7 @@ const CardBody = () => {
   };
 
   const handleUpdate = (task) => {
-    
+
     console.log(task.due_date);
     console.log(setStartDate(task.due_date));
 
@@ -285,10 +285,11 @@ const CardBody = () => {
         <div>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <FormControlLabel
+
               control={
                 <Switch
                   checked={showCompletedTasks}
-                  onChange={() => setShowCompletedTasks(!showCompletedTasks)} 
+                  onChange={() => setShowCompletedTasks(!showCompletedTasks)}
                   name="showCompletedTasks"
                   color="primary"
                 />
@@ -309,11 +310,11 @@ const CardBody = () => {
                 color: "#ffffff",
                 marginRight: "10px",
               }}
-              startIcon={<CalendarTodayIcon />} 
+              startIcon={<CalendarTodayIcon />}
             >
               <input
                 type="date"
-                value={taskDueDate}
+                value={taskDueDate || ''}
                 onChange={(e) => setTaskDueDate(e.target.value)}
                 style={{
                   backgroundColor: "#C1A4EB",
@@ -356,11 +357,21 @@ const CardBody = () => {
             <TextField
               placeholder="   Enter task name..."
               variant="standard"
-              fullWidth
-              value={searchId}
+              fullWidth={true}
+              value={searchId || ''}
               className="searchBox"
               onChange={(e) => setSearchId(e.target.value)}
-     
+              InputProps={{
+                style: {
+                  borderBottom: '3px solid #9150F0',
+                  justifyContent: 'center',
+                  top: '-124.9px',
+                  width: '23%',
+                  left: '40.5%',
+                  borderRadius: '5px',
+                },
+              }}
+
               InputLabelProps={{
                 shrink: true,
               }}
@@ -412,11 +423,11 @@ const CardBody = () => {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={task.is_completed}
+                                checked={Boolean(task.is_completed)}
                                 onChange={() => handleToggleComplete(task)}
                                 name="isCompleted"
                                 className={
-                                  task.is_completed
+                                  Boolean(task.is_completed)
                                     ? "checked-checkbox"
                                     : "unchecked-checkbox"
                                 }
@@ -519,7 +530,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Task"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 value={taskToUpdate.task}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, task: e.target.value })
@@ -529,7 +540,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Description"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 value={taskToUpdate.description}
                 onChange={(e) =>
                   setTaskToUpdate({
@@ -542,7 +553,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Link"
                 variant="outlined"
-                fullWidth
+                fullWidth={true}
                 value={taskToUpdate.link}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, link: e.target.value })
@@ -552,9 +563,9 @@ const CardBody = () => {
               <div style={{ marginTop: "15px" }}>
                 <input
                   type="date"
-                  value={taskToUpdate.due_date}
+                  value={taskToUpdate.due_date || ''}
                   selected={Today}
-                  fullWidth
+
                   onChange={(e) =>
                     setTaskToUpdate({
                       ...taskToUpdate,
@@ -601,8 +612,8 @@ const CardBody = () => {
                 <TextField
                   label="Task"
                   variant="outlined"
-                  fullWidth
-                  value={newTodo.task}
+                  fullWidth={true}
+                  value={newTodo.task || ''}
                   onChange={(e) =>
                     setNewTodo({
                       ...newTodo,
@@ -631,7 +642,7 @@ const CardBody = () => {
                 <TextField
                   label="Description"
                   variant="outlined"
-                  fullWidth
+                  fullWidth={true}
                   value={newTodo.description}
                   onChange={(e) =>
                     setNewTodo({ ...newTodo, description: e.target.value })
@@ -641,7 +652,7 @@ const CardBody = () => {
                 <TextField
                   label="Link"
                   variant="outlined"
-                  fullWidth
+                  fullWidth={true}
                   value={newTodo.link}
                   onChange={(e) => {
                     setNewTodo({ ...newTodo, link: e.target.value });
@@ -669,9 +680,9 @@ const CardBody = () => {
 
                   <input
                     type="date"
-                    value={newTodo.due_date}
+                    value={newTodo.due_date || ''}
                     selected={newTodo.due_date}
-                    fullWidth
+                    fullWidth={true}
                     onChange={(e) =>
                       setNewTodo({ ...newTodo, due_date: e.target.value })
                     }
