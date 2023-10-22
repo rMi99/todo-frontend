@@ -357,7 +357,7 @@ const CardBody = () => {
             <TextField
               placeholder="   Enter task name..."
               variant="standard"
-              fullWidth={true}
+              fullWidth={true.toString()}
               value={searchId || ''}
               className="searchBox"
               onChange={(e) => setSearchId(e.target.value)}
@@ -530,7 +530,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Task"
                 variant="outlined"
-                fullWidth={true}
+                fullWidth={true.toString()}
                 value={taskToUpdate.task}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, task: e.target.value })
@@ -540,7 +540,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Description"
                 variant="outlined"
-                fullWidth={true}
+                fullWidth={true.toString()}
                 value={taskToUpdate.description}
                 onChange={(e) =>
                   setTaskToUpdate({
@@ -553,7 +553,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Link"
                 variant="outlined"
-                fullWidth={true}
+                fullWidth={true.toString()}
                 value={taskToUpdate.link}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, link: e.target.value })
@@ -610,9 +610,10 @@ const CardBody = () => {
               <DialogTitle id="add-dialog-title">Add Todo</DialogTitle>
               <DialogContent>
                 <TextField
+                  fullWidth={true.toString()}
                   label="Task"
                   variant="outlined"
-                  fullWidth={true}
+
                   value={newTodo.task || ''}
                   onChange={(e) =>
                     setNewTodo({
@@ -640,9 +641,10 @@ const CardBody = () => {
                   </Typography>
                 )}
                 <TextField
+                  fullWidth={true.toString()}
                   label="Description"
                   variant="outlined"
-                  fullWidth={true}
+
                   value={newTodo.description}
                   onChange={(e) =>
                     setNewTodo({ ...newTodo, description: e.target.value })
@@ -650,9 +652,10 @@ const CardBody = () => {
                   sx={{ mt: 1 }}
                 />
                 <TextField
+                  fullWidth={true.toString()}
                   label="Link"
                   variant="outlined"
-                  fullWidth={true}
+
                   value={newTodo.link}
                   onChange={(e) => {
                     setNewTodo({ ...newTodo, link: e.target.value });
@@ -679,10 +682,11 @@ const CardBody = () => {
                   <span className="corner-span"></span>
 
                   <input
+                    fullWidth={true.toString()}
                     type="date"
                     value={newTodo.due_date || ''}
                     selected={newTodo.due_date}
-                    fullWidth={true}
+
                     onChange={(e) =>
                       setNewTodo({ ...newTodo, due_date: e.target.value })
                     }
