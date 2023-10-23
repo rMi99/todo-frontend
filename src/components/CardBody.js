@@ -23,8 +23,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import isURL from "validator/lib/isURL";
-
-
+import Box from "@mui/material/Box";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -140,7 +139,6 @@ const CardBody = () => {
   };
 
   const handleUpdate = (task) => {
-
     console.log(task.due_date);
     console.log(setStartDate(task.due_date));
 
@@ -285,7 +283,6 @@ const CardBody = () => {
         <div>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <FormControlLabel
-
               control={
                 <Switch
                   checked={showCompletedTasks}
@@ -314,7 +311,7 @@ const CardBody = () => {
             >
               <input
                 type="date"
-                value={taskDueDate || ''}
+                value={taskDueDate || ""}
                 onChange={(e) => setTaskDueDate(e.target.value)}
                 style={{
                   backgroundColor: "#C1A4EB",
@@ -354,31 +351,108 @@ const CardBody = () => {
           </div>
 
           <div>
-            <TextField
-              placeholder="   Enter task name..."
-              variant="standard"
-              fullWidth={true.toString()}
-              value={searchId || ''}
-              className="searchBox"
-              onChange={(e) => setSearchId(e.target.value)}
-              InputProps={{
-                style: {
-                  borderBottom: '3px solid #9150F0',
-                  justifyContent: 'center',
-                  top: '-124.9px',
-                  width: '23%',
-                  left: '40.5%',
-                  borderRadius: '5px',
-                },
-              }}
+            <Box      
+            >
+              {/* <TextField
+                placeholder="   Enter task name..."
+                variant="standard"
+                fullWidth={true.toString()}
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  style: {
+                    borderBottom: '3px solid #9150F0',
+                    justifyContent: 'center',
+                    top: '-124.9px',
+                    width: '23%',
+                    left: '40.5%',
+                    borderRadius: '5px',
+                  },
+                  
+                }}
 
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ mt: 2.5 }}
-            />
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              /> */}
+
+              <TextField
+                placeholder="Enter task name..."
+                variant="standard"
+                fullWidth
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  sx: {
+                    display: {
+                      xs: "block",
+                      md: "none",
+                      lg: "none",
+
+                    },
+                    borderBottom: "3px solid #9150F0",
+                    justifyContent: "center",
+                    top: "-127.9px",
+                    width: "60%",
+                    left: "27.5%",
+                    // borderRadius: "5px",
+                    md: {
+                      borderBottom: "3px solid #9150F0",
+                      justifyContent: "center",
+                      top: "-124.9px",
+                      width: "80%",
+                      left: "10.5%",
+                      borderRadius: "5px",
+                    },
+                    xs: {
+                      borderBottom: "3px solid #9150F0",
+                      justifyContent: "center",
+                      top: "-124.9px",
+                      width: "23%",
+                      left: "40.5%",
+                      borderRadius: "5px",
+                    },
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              />
+                <TextField
+                placeholder="Enter task name..."
+                variant="standard"
+                fullWidth
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  sx: {
+                    display: {
+                      xs: "none",
+                      md: "block",
+                      lg: "block",
+
+                    },
+                    borderBottom: "3px solid #9150F0",
+                    justifyContent: "center",
+                    top: "-140.9px",
+                    width: "25%",
+                    left: "70.5%",
+                    borderRadius: "5px",
+  
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              />
+            </Box>
           </div>
-
           <div>
             {filteredTasks.length === 0 ? (
               <div
@@ -563,9 +637,8 @@ const CardBody = () => {
               <div style={{ marginTop: "15px" }}>
                 <input
                   type="date"
-                  value={taskToUpdate.due_date || ''}
+                  value={taskToUpdate.due_date || ""}
                   selected={Today}
-
                   onChange={(e) =>
                     setTaskToUpdate({
                       ...taskToUpdate,
@@ -613,8 +686,7 @@ const CardBody = () => {
                   fullWidth={true.toString()}
                   label="Task"
                   variant="outlined"
-
-                  value={newTodo.task || ''}
+                  value={newTodo.task || ""}
                   onChange={(e) =>
                     setNewTodo({
                       ...newTodo,
@@ -644,7 +716,6 @@ const CardBody = () => {
                   fullWidth={true.toString()}
                   label="Description"
                   variant="outlined"
-
                   value={newTodo.description}
                   onChange={(e) =>
                     setNewTodo({ ...newTodo, description: e.target.value })
@@ -655,7 +726,6 @@ const CardBody = () => {
                   fullWidth={true.toString()}
                   label="Link"
                   variant="outlined"
-
                   value={newTodo.link}
                   onChange={(e) => {
                     setNewTodo({ ...newTodo, link: e.target.value });
@@ -684,9 +754,8 @@ const CardBody = () => {
                   <input
                     fullWidth={true.toString()}
                     type="date"
-                    value={newTodo.due_date || ''}
+                    value={newTodo.due_date || ""}
                     selected={newTodo.due_date}
-
                     onChange={(e) =>
                       setNewTodo({ ...newTodo, due_date: e.target.value })
                     }
