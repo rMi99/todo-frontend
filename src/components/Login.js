@@ -19,12 +19,7 @@ const Login = () => {
   const backgroundStyle = {
     backgroundColor: '#e3e6f0',
   };
-<<<<<<< HEAD
-<<<<<<< HEAD
- 
 
-=======
-=======
   
   const [searchParams] = useSearchParams();
   useEffect(()=>{
@@ -46,9 +41,9 @@ const Login = () => {
     }
   },[searchParams])
 
->>>>>>> do9
+
   const handleLoginWithGoogle = async () => {
->>>>>>> do9
+
 
     window.location.href = 'http://localhost:8000/api/auth/google';
 
