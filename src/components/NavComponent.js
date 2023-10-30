@@ -9,13 +9,20 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+<<<<<<< HEAD
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
+=======
+import MoreIcon from '@mui/icons-material/MoreVert';
+// import { Link } from 'react-router-dom';
+import UserProfileMenu from './UserProfileMenuItem';
+>>>>>>> do9
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+<<<<<<< HEAD
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -33,6 +40,25 @@ export default function PrimarySearchAppBar() {
   
 };
 
+=======
+  const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const userName = (localStorage.getItem('user'));
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_id');
+  
+
+    window.location.href = '/login';
+    // return <redirect to="/login" />;
+};
+>>>>>>> do9
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -42,6 +68,13 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+<<<<<<< HEAD
+=======
+  const linkStyle = {
+    textDecoration: 'none', 
+    color: 'inherit',
+};
+>>>>>>> do9
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -64,7 +97,15 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
+<<<<<<< HEAD
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+=======
+      {/* <Link to='/profile' style={linkStyle} >
+       */}
+       <MenuItem ><UserProfileMenu style={linkStyle} userName={userName}/></MenuItem>
+      {/* <MenuItem >You Login as : {userName}</MenuItem> */}
+      {/* </Link> */}
+>>>>>>> do9
       <MenuItem onClick={handleLogout}>Log Out</MenuItem>
     </Menu>
   );
@@ -87,6 +128,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
      
+<<<<<<< HEAD
      <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -111,12 +153,26 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>Profile</p>
       </MenuItem>
+=======
+     {/* <Link to="/profile"> */}
+     {/* <MenuItem >You Login as : {userName}</MenuItem> */}
+     <MenuItem><UserProfileMenu userName={userName}/></MenuItem>
+     
+     {/* </Link> */}
+      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+   
+>>>>>>> do9
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+<<<<<<< HEAD
       <AppBar position="static" sx={{ backgroundColor: '#79AC78' }}>
+=======
+      <AppBar position="static" sx={{ backgroundColor: 'white',color: '#9150F0'}}>
+     
+>>>>>>> do9
         <Toolbar>
           <IconButton
             size="large"
@@ -131,9 +187,15 @@ export default function PrimarySearchAppBar() {
             variant="h6"
             noWrap
             component="div"
+<<<<<<< HEAD
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
            Todo Application
+=======
+            sx={{ display: { xs: 'none', sm: 'block' ,fontFamily:'system-ui', } }}
+          >
+           Well-Timed
+>>>>>>> do9
           </Typography>
         
           <Box sx={{ flexGrow: 1 }} />
