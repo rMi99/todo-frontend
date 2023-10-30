@@ -23,8 +23,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import isURL from "validator/lib/isURL";
-
-
+import Box from "@mui/material/Box";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -105,15 +104,6 @@ const CardBody = () => {
 
     if (newTodo.link === "" || isURL(newTodo.link)) {
       console.log(startDate);
-      // const originalDate = new Date(startDate);
-      // const year = originalDate.getFullYear();
-      // const month = (originalDate.getMonth() + 1).toString().padStart(2, "0");
-      // const day = originalDate.getDate().toString().padStart(2, "0");
-      // const formattedDate = `${year}${month}${day}`;
-
-      // console.log(formattedDate);
-
-      // newTodo.due_date = formattedDate;
       axios
         .post("http://localhost:8000/api/create", newTodo)
         .then(() => {
@@ -134,7 +124,7 @@ const CardBody = () => {
         .catch((error) => {
           console.error("Error adding todo:", error);
           setIsLoading(false);
-          toast.error("catch", error);
+          // toast.error("catch", error);
         });
     } else {
       setLinkError(true);
@@ -149,7 +139,6 @@ const CardBody = () => {
   };
 
   const handleUpdate = (task) => {
-    
     console.log(task.due_date);
     console.log(setStartDate(task.due_date));
 
@@ -269,17 +258,7 @@ const CardBody = () => {
     setTaskDueDate(null);
     handleSearch();
   };
- 
 
-  // const handleSearch = () => {
-  //   const filtered = tasks.filter((task) =>
-  //     task.task.toLowerCase().includes(searchId.toLowerCase()) &&
-  //     (!showCompletedTasks || !task.is_completed)
-  //   );
-
-  //   setFilteredTasks(filtered);
-  //   setIsLoading(false);
-  // };
   const handleSearch = () => {
     const filtered = tasks.filter(
       (task) =>
@@ -307,7 +286,7 @@ const CardBody = () => {
               control={
                 <Switch
                   checked={showCompletedTasks}
-                  onChange={() => setShowCompletedTasks(!showCompletedTasks)} 
+                  onChange={() => setShowCompletedTasks(!showCompletedTasks)}
                   name="showCompletedTasks"
                   color="primary"
                 />
@@ -328,11 +307,11 @@ const CardBody = () => {
                 color: "#ffffff",
                 marginRight: "10px",
               }}
-              startIcon={<CalendarTodayIcon />} 
+              startIcon={<CalendarTodayIcon />}
             >
               <input
                 type="date"
-                value={taskDueDate}
+                value={taskDueDate || ""}
                 onChange={(e) => setTaskDueDate(e.target.value)}
                 style={{
                   backgroundColor: "#C1A4EB",
@@ -372,30 +351,108 @@ const CardBody = () => {
           </div>
 
           <div>
-            <TextField
-              placeholder="   Enter task name..."
-              variant="standard"
-              fullWidth
-              value={searchId}
-              className="srchBox"
-              onChange={(e) => setSearchId(e.target.value)}
-              InputProps={{
-                style: {
-                  borderBottom: "3px solid #9150F0",
-                  justifyContent: "center",
-                  top: "-115px",
-                  width: "23%",
-                  left: "64.5%",
-                  borderRadius: "5px",
-                },
-              }}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{ mt: 2.5 }}
-            />
-          </div>
+            <Box      
+            >
+              {/* <TextField
+                placeholder="   Enter task name..."
+                variant="standard"
+                fullWidth={true.toString()}
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  style: {
+                    borderBottom: '3px solid #9150F0',
+                    justifyContent: 'center',
+                    top: '-124.9px',
+                    width: '23%',
+                    left: '40.5%',
+                    borderRadius: '5px',
+                  },
+                  
+                }}
 
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              /> */}
+
+              <TextField
+                placeholder="Enter task name..."
+                variant="standard"
+                fullWidth
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  sx: {
+                    display: {
+                      xs: "block",
+                      md: "none",
+                      lg: "none",
+
+                    },
+                    borderBottom: "3px solid #9150F0",
+                    justifyContent: "center",
+                    top: "-127.9px",
+                    width: "60%",
+                    left: "27.5%",
+                    // borderRadius: "5px",
+                    md: {
+                      borderBottom: "3px solid #9150F0",
+                      justifyContent: "center",
+                      top: "-124.9px",
+                      width: "80%",
+                      left: "10.5%",
+                      borderRadius: "5px",
+                    },
+                    xs: {
+                      borderBottom: "3px solid #9150F0",
+                      justifyContent: "center",
+                      top: "-124.9px",
+                      width: "23%",
+                      left: "40.5%",
+                      borderRadius: "5px",
+                    },
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              />
+                <TextField
+                placeholder="Enter task name..."
+                variant="standard"
+                fullWidth
+                value={searchId || ""}
+                className="searchBox"
+                onChange={(e) => setSearchId(e.target.value)}
+                InputProps={{
+                  sx: {
+                    display: {
+                      xs: "none",
+                      md: "block",
+                      lg: "block",
+
+                    },
+                    borderBottom: "3px solid #9150F0",
+                    justifyContent: "center",
+                    top: "-140.9px",
+                    width: "25%",
+                    left: "70.5%",
+                    borderRadius: "5px",
+  
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                sx={{ mt: 2.5 }}
+              />
+            </Box>
+          </div>
           <div>
             {filteredTasks.length === 0 ? (
               <div
@@ -440,11 +497,11 @@ const CardBody = () => {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                checked={task.is_completed}
+                                checked={Boolean(task.is_completed)}
                                 onChange={() => handleToggleComplete(task)}
                                 name="isCompleted"
                                 className={
-                                  task.is_completed
+                                  Boolean(task.is_completed)
                                     ? "checked-checkbox"
                                     : "unchecked-checkbox"
                                 }
@@ -547,7 +604,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Task"
                 variant="outlined"
-                fullWidth
+                fullWidth={true.toString()}
                 value={taskToUpdate.task}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, task: e.target.value })
@@ -557,7 +614,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Description"
                 variant="outlined"
-                fullWidth
+                fullWidth={true.toString()}
                 value={taskToUpdate.description}
                 onChange={(e) =>
                   setTaskToUpdate({
@@ -570,7 +627,7 @@ const CardBody = () => {
                 sx={{ mt: 1 }}
                 label="Link"
                 variant="outlined"
-                fullWidth
+                fullWidth={true.toString()}
                 value={taskToUpdate.link}
                 onChange={(e) =>
                   setTaskToUpdate({ ...taskToUpdate, link: e.target.value })
@@ -580,9 +637,8 @@ const CardBody = () => {
               <div style={{ marginTop: "15px" }}>
                 <input
                   type="date"
-                  value={taskToUpdate.due_date}
+                  value={taskToUpdate.due_date || ""}
                   selected={Today}
-                  fullWidth
                   onChange={(e) =>
                     setTaskToUpdate({
                       ...taskToUpdate,
@@ -627,10 +683,10 @@ const CardBody = () => {
               <DialogTitle id="add-dialog-title">Add Todo</DialogTitle>
               <DialogContent>
                 <TextField
+                  fullWidth={true.toString()}
                   label="Task"
                   variant="outlined"
-                  fullWidth
-                  value={newTodo.task}
+                  value={newTodo.task || ""}
                   onChange={(e) =>
                     setNewTodo({
                       ...newTodo,
@@ -657,9 +713,9 @@ const CardBody = () => {
                   </Typography>
                 )}
                 <TextField
+                  fullWidth={true.toString()}
                   label="Description"
                   variant="outlined"
-                  fullWidth
                   value={newTodo.description}
                   onChange={(e) =>
                     setNewTodo({ ...newTodo, description: e.target.value })
@@ -667,9 +723,9 @@ const CardBody = () => {
                   sx={{ mt: 1 }}
                 />
                 <TextField
+                  fullWidth={true.toString()}
                   label="Link"
                   variant="outlined"
-                  fullWidth
                   value={newTodo.link}
                   onChange={(e) => {
                     setNewTodo({ ...newTodo, link: e.target.value });
@@ -696,10 +752,10 @@ const CardBody = () => {
                   <span className="corner-span"></span>
 
                   <input
+                    fullWidth={true.toString()}
                     type="date"
-                    value={newTodo.due_date}
+                    value={newTodo.due_date || ""}
                     selected={newTodo.due_date}
-                    fullWidth
                     onChange={(e) =>
                       setNewTodo({ ...newTodo, due_date: e.target.value })
                     }

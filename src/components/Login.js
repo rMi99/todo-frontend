@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Paper, Typography, TextField, Button } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Spinner from './Spinner';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import GoogleIcon from '@mui/icons-material/Google';
-// import { useHistory } from 'react-router-dom';
+// import { GoogleLogin } from 'react-google-login'; 
+import { useSearchParams } from 'react-router-dom';
+
 
 const Login = () => {
-  // const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -19,19 +20,41 @@ const Login = () => {
     backgroundColor: '#e3e6f0',
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
  
 
 =======
+=======
+  
+  const [searchParams] = useSearchParams();
+  useEffect(()=>{
+    const token = searchParams.get('token');
+    if(token){
+        axios.post('http://localhost:8000/api/auth/google/callback/confirm', {
+          token:token
+        }).then((res=>{
+          const data = res.data;
+          localStorage.setItem('user', `${data?.name}`);
+          localStorage.setItem('user_id', `${data?.id}`);
+          localStorage.setItem('token', `${data?.token}`);
+          window.location.href = '/dashboard';
+          setIsLoading(false);
+        })).catch(err=>{
+          setPasswordError('Login failed. Please check your credentials.');
+          setIsLoading(false);
+        })
+    }
+  },[searchParams])
+
+>>>>>>> do9
   const handleLoginWithGoogle = async () => {
 >>>>>>> do9
 
-    window.location.href = 'http://localhost:8000/api/auth/google/callback';
-    }
+    window.location.href = 'http://localhost:8000/api/auth/google';
 
+  }
 
-  
   const handleLogin = async () => {
-    // Reset error messages
     setEmailError('');
     setPasswordError('');
 
@@ -91,8 +114,8 @@ const Login = () => {
           <Grid item xs={12} sm={8} md={6} lg={4}>
             <Paper elevation={3} style={{ padding: '20px', textAlign: 'center' }}>
               <LockOutlinedIcon />
-              <Typography variant="h5" style={{ marginTop: '10px' }}>
-                Login
+              <Typography variant="h5" style={{ marginTop: '10px',fontFamily: 'system-ui' ,fontWeight: '1000'}}>
+              Well-Timed
               </Typography>
               <TextField
                 label="Email"
@@ -116,48 +139,51 @@ const Login = () => {
                 error={!!passwordError}
                 helperText={passwordError}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleLogin}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                Login
-              </Button>
+        <Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleLogin}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  Login
+</Button>
 
+<Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleLoginWithGoogle}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  <IconButton color="inherit">
+    <GoogleIcon />
+  </IconButton>
+  Login with Google
+</Button>
 
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleLoginWithGoogle}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                <IconButton style={{ marginRight: '8px' }} color="inherit">
-                  <GoogleIcon />
-                </IconButton>
-                Login with Google
-              </Button>
+<Button
+  variant="contained"
+  color="primary"
+  fullWidth
+  onClick={handleRegisterClick}
+  style={{
+    margin: '5px 0',
+    backgroundColor: '#9150F0',
+    height: '40px', 
+  }}
+>
+  Register
+</Button>
 
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleRegisterClick}
-                style={{
-                  margin: '5px 0',
-                  backgroundColor: '#9150F0',
-                }}
-              >
-                Register
-              </Button>
             </Paper>
           </Grid>
         </Grid>

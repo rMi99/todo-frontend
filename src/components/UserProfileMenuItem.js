@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import './UserProfileMenuItemStyle.css';
+
 import {
   Avatar,
   Typography,
@@ -31,23 +33,6 @@ function ProfilePage({ userName }) {
   const [passwordError, setPasswordError] = useState('');
   const userId = localStorage.getItem('user_id');
 
-  useEffect(() => {
-    fetchUserDetails();
-  },);
-
-  const fetchUserDetails = () => {
-    axios
-      .get(`http://localhost:8000/api/user/${userId}`)
-      .then((response) => {
-        const userData = response.data;
-        setNewName(userData.name);
-        setNewEmail(userData.email);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -79,11 +64,6 @@ function ProfilePage({ userName }) {
       return;
     }
 
-    if (emailError) {
-      toast.error('Please provide a valid email address.');
-      return;
-    }
-
     const userData = {
       name: newName,
       email: newEmail,
@@ -95,19 +75,26 @@ function ProfilePage({ userName }) {
       .then((response) => {
         localStorage.setItem('user', newName);
         console.log(response.data);
-
         toast.success('Profile updated successfully', { autoClose: 2000 });
-
-        userData[newPassword] = null;
-
         handleClose();
       })
       .catch((error) => {
         console.error(error);
-
         toast.error('Failed to update profile');
       });
   };
+
+  axios
+  .get(`http://localhost:8000/api/user/${userId}`)
+  .then((response) =>{
+  // setNewName();
+  setNewEmail(response.data.email);
+}).catch((error) => {
+
+  console.error(error);
+  toast.error('Warning The ');
+
+});
 
   const linkStyle = {
     textDecoration: 'none',
@@ -122,7 +109,7 @@ function ProfilePage({ userName }) {
       <Dialog open={open} onClose={handleClose} maxWidth="md">
         <DialogTitle>User Profile</DialogTitle>
         <DialogContent>
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '0 auto' }}>
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '900px', margin: '0 auto' }}>
             <Grid container spacing={2} justifyContent="center" alignItems="center">
               <Grid item>
                 <Avatar style={{ width: '100px', height: '100px' }}>
@@ -130,13 +117,13 @@ function ProfilePage({ userName }) {
                 </Avatar>
               </Grid>
               <Grid item>
-                <Typography variant="h5">User's Name</Typography>
+                <Typography variant="h5">User Details</Typography>
                 <TextField
                   variant="standard"
                   fullWidth
                   margin="normal"
                   value={newName}
-                  onChange={(e) => setNewName(e.target.value)} 
+                  onChange={(e) => setNewName(e.target.value)}
                 />
               </Grid>
               <Grid item>
@@ -147,7 +134,13 @@ function ProfilePage({ userName }) {
             </Grid>
           </Paper>
 
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
+
+          <div className='flex-container'>
+
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto',}}>
+            <Typography variant="h6">User Details</Typography>
+            
+          <Divider />
             <List>
               <ListItem>
                 <ListItemText primary="Name" secondary={<TextField variant="standard" fullWidth value={newName} />} />
@@ -161,7 +154,7 @@ function ProfilePage({ userName }) {
                       variant="standard"
                       fullWidth
                       value={newEmail}
-                      onChange={(e) => setNewEmail(e.target.value)} 
+                      onChange={(e) => setNewEmail(e.target.value)}
                       onBlur={handleEmailBlur}
                       error={emailError.length > 0}
                       helperText={emailError}
@@ -169,11 +162,16 @@ function ProfilePage({ userName }) {
                   }
                 />
               </ListItem>
+
             </List>
           </Paper>
 
-          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto' }}>
-            <List>
+          <Paper elevation={3} style={{ padding: '16px', maxWidth: '600px', margin: '20px auto', }}>
+
+          <Typography variant="h6">Password Change</Typography>
+
+          <Divider />
+
               <ListItem>
                 <ListItemText
                   primary="New Password"
@@ -183,10 +181,7 @@ function ProfilePage({ userName }) {
                       fullWidth
                       type="password"
                       value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)} 
-                      onBlur={handlePasswordBlur}
-                      error={passwordError.length > 0}
-                      helperText={passwordError}
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                   }
                 />
@@ -194,14 +189,14 @@ function ProfilePage({ userName }) {
               <Divider />
               <ListItem>
                 <ListItemText
-                  primary="Confirm Password"
+                  primary="New Password"
                   secondary={
                     <TextField
                       variant="standard"
                       fullWidth
                       type="password"
                       value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       onBlur={handlePasswordBlur}
                       error={passwordError.length > 0}
                       helperText={passwordError}
@@ -209,8 +204,10 @@ function ProfilePage({ userName }) {
                   }
                 />
               </ListItem>
-            </List>
           </Paper>
+
+</div>
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
